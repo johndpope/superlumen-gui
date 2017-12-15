@@ -1,0 +1,32 @@
+body#about {
+    background-image: url("../../assets/images/generic.jpg");
+    padding-top: 4rem;
+
+    .logo {
+        position: absolute;
+        top: -200px;
+        left: 192px;
+        -webkit-animation: spin 60s linear infinite;
+        -moz-animation: spin 60s linear infinite;
+        animation: spin 60s linear infinite;
+    }
+
+    @-moz-keyframes spin {
+        100% {
+            -moz-transform: rotate(360deg);
+        }
+    }
+
+    @-webkit-keyframes spin {
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+}

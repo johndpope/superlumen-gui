@@ -1,6 +1,10 @@
 # SUPERLUMEN
 A powerful, open-source, free [Lumen](https://www.stellar.org/lumens/) wallet for [Stellar Core](https://www.stellar.org/) blockchain networks.
 
+**!! This wallet is not yet functional. It is currently under active development. Beta ETA Jan 2018.**
+
+Preview Screenshot:
+![Preview](https://i.imgur.com/M4n4pcc.png)
 ---
 
 ## Building
