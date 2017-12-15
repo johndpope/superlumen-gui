@@ -1,17 +1,21 @@
+# SUPERLUMEN
+A powerful, open-source, free [Lumen](https://www.stellar.org/lumens/) wallet for [Stellar Core](https://www.stellar.org/) blockchain networks.
+
+---
 
 ## Building
-This software is buildable on Windows, Mac, and Linux. Specifically, building is only supported on:
+You can build Superlumen on the following operating systems:
 - Debian Linux: Stretch
-- Microsoft Windows 10
-- MacOS
+
+In general, you should be able to build on other OS's with no or little modification.
 
 ### Linux (Debian)
 On Debian systems you may need to install additional packaging tools if you want to generate a distribution.
 
-Running ```sudo apt install build-essential rpm bsdtar``` should ensure you have the right tools.
+Running ```sudo apt install build-essential rpm bsdtar icnsutils imagemagick``` should ensure you have the right tools.
 
 #### Generating Mac/Windows Icons
-To regenerate the Mac and Windows icon files from the icon PNGs (```build/icons/*.png```) you should run the npm script ```icons```.
+To regenerate the Mac and Windows icon files from the icon PNGs you should run the npm script ```icons```.
 
 Example: ```npm run icons```
 

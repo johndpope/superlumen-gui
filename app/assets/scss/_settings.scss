@@ -65,24 +65,24 @@
 // 1. Global
 // ---------
 
-// $global-font-size: 100%;
+$global-font-size: 10px;
 // $global-width: rem-calc(1200);
 // $global-lineheight: 1.5;
 $foundation-palette: (
-  primary: #1779ba,
-  secondary: #767676,
-  success: #3adb76,
-  warning: #ffae00,
+  primary: #0e4a7e,
+  secondary: #f5d801,
+  success: #3C3C3C,
+  warning: #f0a600,
   alert: #cc4b37,
 );
 $light-gray: #e6e6e6;
-$medium-gray: #cacaca;
+$medium-gray: #cacaca; 
 $dark-gray: #8a8a8a;
 $black: #0a0a0a;
 $white: #fefefe;
 $body-background: map-get($foundation-palette, primary);
 $body-font-color: $white;
-// $body-font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+$body-font-family: 'Press Start 2P', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
 // $body-antialiased: true;
 // $global-margin: 1rem;
 // $global-padding: 1rem;
@@ -167,10 +167,10 @@ $body-font-color: $white;
 // $code-background: $light-gray;
 // $code-border: 1px solid $medium-gray;
 // $code-padding: rem-calc(2 5 1);
-// $anchor-color: $primary-color;
-// $anchor-color-hover: scale-color($anchor-color, $lightness: -14%);
-// $anchor-text-decoration: none;
-// $anchor-text-decoration-hover: none;
+$anchor-color: map-get($foundation-palette, secondary);;
+$anchor-color-hover: scale-color($anchor-color, $lightness: -14%);
+$anchor-text-decoration: none;
+$anchor-text-decoration-hover: none;
 // $hr-width: $global-width;
 // $hr-border: 1px solid $medium-gray;
 // $hr-margin: rem-calc(20) auto;

@@ -9,7 +9,7 @@
         "dist": "electron-builder",
         "icons": "convert build/icons/icon-*.png build/icons/icon.ico && png2icns build/icons/icon.icns build/icons/icon-16x16.png build/icons/icon-32x32.png build/icons/icon-48x48.png build/icons/icon-128x128.png build/icons/icon-256x256.png build/icons/icon-512x512.png",
         "sass": "./node_modules/node-sass/bin/node-sass app/assets/scss/main.scss app/assets/css/main.css",
-        "sass-watch": "./node_modules/node-sass/bin/node-sass -w app/assets/scss/main.scss app/assets/css/main.css",
+        "sass-watch": "./node_modules/node-sass/bin/node-sass -wr app/assets/scss/main.scss app/assets/css/main.css",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "postinstall": "electron-builder install-app-deps",
@@ -22,14 +22,18 @@
         "manager"
     ],
     "author": {
-        "name": "SuperLumen",
+        "name": "Super-Lumen",
         "email": "contact@superlumen.org"
+    },
+    "repository": {
+        "url": "https://github.com/super-lumen/superlumen.org",
+        "type": "git"
     },
     "homepage": "https://www.superlumen.org",
     "license": "MIT",
     "build": {
-        "productName": "SuperLumen",
-        "copyright": "Copyright © 2017 The SuperLumen Team",
+        "productName": "Superlumen",
+        "copyright": "Copyright © 2017 The Superlumen Team",
         "appId": "com.superlumen.gui",
         "linux": {
             "executableName": "superlumen",

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SuperLumen</title>
+    <title>Superlumen</title>
     <link href="../assets/css/main.css" rel="stylesheet" type="text/css" />
     <script>
         window.$ = window.jQuery = require('jquery');
@@ -12,11 +12,27 @@
 </head>
 
 <body>
-    <h1>Hello World!</h1>
-    We are using node
-    <script>document.write(process.versions.node)</script>, Chrome
-    <script>document.write(process.versions.chrome)</script>, and Electron
-    <script>document.write(process.versions.electron)</script>.
+    <h1>Unlock</h1>
+    <p>
+        Unlock your wallet using your password below.
+        <br /> You can also
+        <a href="new.html">create a new wallet</a>. To add an account to your existing wallet, unlock it first.
+    </p>
+    <form>
+        <div class="grid-container">
+            <div class="grid-x grid-padding-x">
+                <div class="medium-12 cell">
+                    <label>
+                        Password
+                        <input type="password">
+                    </label>
+                </div>
+                <div class="medium-12 cell">
+                    <button class="button">Unlock</button>
+                </div>
+            </div>
+        </div>
+    </form>
 </body>
 
 </html>

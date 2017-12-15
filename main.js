@@ -47,7 +47,7 @@ var self = module.exports = {
             self.window = null //deref
         });
         //handle dev env.
-        self.window.webContents.openDevTools();
+        //self.window.webContents.openDevTools();
     }
 
 };

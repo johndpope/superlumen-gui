@@ -1,8 +1,10 @@
-//modules
-@import 'settings';
-
 //foundation
+@import 'settings';
 @import 'node_modules/foundation-sites/scss/foundation.scss';
 @include foundation-everything;
 
+//vendor
+@import 'vendor/font-awesome/fontawesome.scss';
 
+//modules
+@import 'modules/layout';
