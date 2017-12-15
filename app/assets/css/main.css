@@ -7660,7 +7660,7 @@ body#about {
   padding-top: 4rem; }
   body#about .logo {
     position: absolute;
-    top: -200px;
+    top: -190px;
     left: 192px;
     -webkit-animation: spin 60s linear infinite;
     -moz-animation: spin 60s linear infinite;
