@@ -1,0 +1,115 @@
+{
+    "name": "superlumen-gui",
+    "version": "0.0.1",
+    "description": "A wallet built for the Stellar Core network and the transaction of the crypto-currency Lumens \"XLM\".",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder",
+        "icons": "convert build/icons/icon-*.png build/icons/icon.ico && png2icns build/icons/icon.icns build/icons/icon-16x16.png build/icons/icon-32x32.png build/icons/icon-48x48.png build/icons/icon-128x128.png build/icons/icon-256x256.png build/icons/icon-512x512.png",
+        "sass": "./node_modules/node-sass/bin/node-sass app/assets/scss/main.scss app/assets/css/main.css",
+        "sass-watch": "./node_modules/node-sass/bin/node-sass -w app/assets/scss/main.scss app/assets/css/main.css",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "postinstall": "electron-builder install-app-deps",
+    "keywords": [
+        "lumen",
+        "wallet",
+        "crypto",
+        "cryptocurrency",
+        "accounts",
+        "manager"
+    ],
+    "author": {
+        "name": "SuperLumen",
+        "email": "contact@superlumen.org"
+    },
+    "homepage": "https://www.superlumen.org",
+    "license": "MIT",
+    "build": {
+        "productName": "SuperLumen",
+        "copyright": "Copyright © 2017 The SuperLumen Team",
+        "appId": "com.superlumen.gui",
+        "linux": {
+            "executableName": "superlumen",
+            "category": "Office",
+            "synopsis": "Stellar Lumen Wallet",
+            "icon": "icons",
+            "target": [
+                {
+                    "target": "deb",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                },
+                {
+                    "target": "rpm",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                },
+                {
+                    "target": "freebsd",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                },
+                {
+                    "target": "pacman",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                },
+                {
+                    "target": "apk",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                },
+                {
+                    "target": "tar.gz",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                }
+            ]
+        },
+        "win": {
+            "target": [
+                {
+                    "target": "nsis"
+                },
+                {
+                    "target": "portable"
+                }
+            ]
+        },
+        "mac": {
+            "category": "public.app-category.finance",
+            "target": [
+                {
+                    "target": "dmg"
+                },
+                {
+                    "target": "pkg"
+                }
+            ]
+        }
+    },
+    "dependencies": {
+        "foundation-sites": "^6.4.4-rc1",
+        "jquery": "^3.2.1"
+    },
+    "devDependencies": {
+        "electron": "^1.7.9",
+        "electron-builder": "^19.49.0",
+        "node-sass": "^4.7.2"
+    }
+}
