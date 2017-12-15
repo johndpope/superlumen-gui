@@ -3,6 +3,10 @@ A powerful, open-source, free [Lumen](https://www.stellar.org/lumens/) wallet fo
 
 **!! This wallet is not yet functional. It is currently under active development. Beta ETA Jan 2018.**
 
+You can support our efforts by sending XLM to:
+GBOBXLZCZWCP4A3FAWX7244JFFEDTVR75L4AK45Z5ZOCQV3NHNSYWQX2
+Thanks! We really appreciate it!
+
 Preview Screenshot:
 ![Preview](https://i.imgur.com/M4n4pcc.png)
 ---
