@@ -1,42 +1,42 @@
 body#index {
     overflow: hidden;
+    transition: 1s padding ease-out;
 
     .grid-container {
         position: relative;
         z-index: 0;
     }
-    
+
     .logo {
         position: absolute;
+        display: inline-block;
         top: -20px;
-        left: 0; 
-        right: 0; 
-        margin-left: auto; 
-        margin-right: auto; 
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
         opacity: 0.25;
-        -webkit-animation: spin 420s linear infinite;
-        -moz-animation: spin 420s linear infinite;
-        animation: spin 420s linear infinite;
+        animation: spin 420s linear infinite none;
+        transition: 1s;
         z-index: -999;
-    }
-
-    @-moz-keyframes spin {
-        100% {
-            -moz-transform: rotate(-360deg);
-        }
-    }
-
-    @-webkit-keyframes spin {
-        100% {
-            -webkit-transform: rotate(-360deg);
-        }
     }
 
     @keyframes spin {
         100% {
-            -webkit-transform: rotate(-360deg);
-            transform: rotate(-360deg);
+            transform: rotate(360deg);
         }
     }
 
+    .create-wallet {
+        display: none;
+    }
+
+    &.create {
+        padding-left: 35%;
+
+        .logo {
+            left: -600px;
+            opacity: 0.45;
+        }
+    }
 }

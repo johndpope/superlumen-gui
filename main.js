@@ -1,12 +1,18 @@
 var electron = require('electron');
 var path = require('path');
 var url = require('url');
+var process = require('process');
+require('dotenv').config();
 
 var self = module.exports = {
 
     app: null,
 
     window: null,
+
+    state: {
+        development: !!process.env.SUPERLUMEN_ENV
+    },
 
     main: function () {
         self.app = electron.app;
@@ -51,8 +57,6 @@ var self = module.exports = {
         //set app menus
         var menu = electron.Menu.buildFromTemplate(self.menuTemplate());
         electron.Menu.setApplicationMenu(menu);
-        //handle dev env.
-        //self.window.webContents.openDevTools();
     },
 
     handleExternalLinks: function (e, url) {
@@ -63,11 +67,11 @@ var self = module.exports = {
     },
 
     menuTemplate: function () {
-        return [
+        var template = [
             {
                 label: 'File',
                 submenu: [
-                    { role: 'close' }
+                    { role: 'quit' }
                 ]
             },
             {
@@ -79,6 +83,15 @@ var self = module.exports = {
                     { role: 'cut' },
                     { role: 'copy' },
                     { role: 'paste' },
+                ]
+            },
+            {
+                label: 'Developer',
+                visible: self.state.development,
+                submenu: [
+                    { role: 'reload' },
+                    { role: 'forcereload' },
+                    { role: 'toggledevtools' }
                 ]
             },
             {
@@ -128,6 +141,7 @@ var self = module.exports = {
                 ]
             }
         ];
+        return template;
     }
 
 };

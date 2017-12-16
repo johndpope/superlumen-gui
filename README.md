@@ -5,13 +5,13 @@ A powerful, open-source, free [Lumen](https://www.stellar.org/lumens/) wallet fo
 
 Check out our [milestones](https://github.com/super-lumen/superlumen-gui/milestones) for a status of where we are.
 
-Preview Screenshot:
-![Preview](https://i.imgur.com/M4n4pcc.png)
+#### Preview Screenshot:
+![Preview](https://thumbs.gfycat.com/MixedEntireBat-size_restricted.gif)
 
 > #### Support the free and open development of Superlumen
-> We accept, you guessed it, Lumens!  
+> We accept, you guessed it, Lumens (XLM) ! 
 > GBOBXLZCZWCP4A3FAWX7244JFFEDTVR75L4AK45Z5ZOCQV3NHNSYWQX2  
-> Thanks! We really appreciate it!
+> ❤ We really appreciate it!
 
 ---
 
