@@ -1,26 +1,28 @@
 body#about {
     background-image: url("../../assets/images/generic.jpg");
-    padding-top: 4rem;
+    padding-top: 6rem;
+    padding-bottom: 0;
+    opacity: 0;
+    overflow: hidden;
+
+    &.view-ready {
+        animation: fade-in 2s forwards;
+    }
+
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    .intro {
+        font-size: 70%;
+    }
 
     .logo {
         position: absolute;
         top: -190px;
         left: 192px;
-        -webkit-animation: spin 60s linear infinite;
-        -moz-animation: spin 60s linear infinite;
         animation: spin 60s linear infinite;
-    }
-
-    @-moz-keyframes spin {
-        100% {
-            -moz-transform: rotate(360deg);
-        }
-    }
-
-    @-webkit-keyframes spin {
-        100% {
-            -webkit-transform: rotate(360deg);
-        }
     }
 
     @keyframes spin {

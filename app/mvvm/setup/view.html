@@ -9,7 +9,9 @@
         window.$ = window.jQuery = require('jquery');
     </script>
     <script src="../../../node_modules/foundation-sites/dist/js/foundation.min.js"></script>
-    <script src="render.js"></script>
+    <script>
+        require('./view-model.js').init();
+    </script>
 </head>
 
 <body id="index">
@@ -30,7 +32,7 @@
                     <input type="password" placeholder="Enter: Wallet Password">
                 </div>
                 <div class="medium-12 cell">
-                    <button class="button">Unlock</button>
+                    <button class="button button-unlock">Unlock</button>
                 </div>
             </div>
         </div>

@@ -1,0 +1,15 @@
+body#main {
+    background-image: url("../../assets/images/quantum.jpg");
+    padding-top: 6rem;
+    padding-bottom: 0;
+    opacity: 0;
+
+    &.view-ready {
+        animation: fade-in 2s forwards;
+    }
+
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+}

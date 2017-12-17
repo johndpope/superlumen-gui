@@ -109,6 +109,8 @@
     },
     "dependencies": {
         "dotenv": "^4.0.0",
+        "font-awesome": "^4.7.0",
+        "foundation-font-awesome-buttons": "^3.3.2",
         "foundation-sites": "^6.4.4-rc1",
         "jquery": "^3.2.1",
         "secure-string": "^1.2.1"

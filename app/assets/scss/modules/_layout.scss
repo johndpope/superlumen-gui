@@ -1,9 +1,20 @@
 body {
     text-align: center;
     padding: 2rem 4rem;
-    background: transparent url(../images/index.jpg) center center no-repeat fixed;
+    background: transparent url(../images/generic.jpg) center center no-repeat fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+
+    button, input, a {
+        &:focus,
+        &:active:focus,
+        &.active:focus,
+        &.focus,
+        &:active.focus,
+        &.active.focus {
+            outline-color: #f4de01 !important;
+        }
+    }
 }
