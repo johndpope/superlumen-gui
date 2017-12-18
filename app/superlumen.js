@@ -10,8 +10,6 @@ var Superlumen = module.exports = {
 
     window: null,
 
-    config: new Config(),
-
     init: function() {
         Superlumen.app = electron.app;
         //handle event when electron is "ready".

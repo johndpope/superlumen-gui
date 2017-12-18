@@ -16,9 +16,12 @@ module.exports = class AboutWindow extends Window {
             resizable: false,
             fullscreenable: false,
             show: false,
-            backgroundColor: '#040404'
+            backgroundColor: '#040404',
+            webPreferences: {
+                preload: path.join(__dirname, '..', 'mvvm', 'autoloader.js')
+            }
         });
-        //this.windowRef.setMenu(null); //no menu
+        this.windowRef.setMenu(null); //no menu
         //load the about view
         this.loadView('about');
     }

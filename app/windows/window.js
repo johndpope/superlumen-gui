@@ -1,6 +1,6 @@
-var path = require('path');
-var url = require('url');
-var electron = require('electron');
+const path = require('path');
+const url = require('url');
+const electron = require('electron');
 
 module.exports = class Window {
     /**
@@ -10,19 +10,25 @@ module.exports = class Window {
         if (!config) {
             throw new Error('Argument "config" must be provided.');
         }
-        var self = this;
-        self.windowRef = new electron.BrowserWindow(config);
+
+        /**
+         * The Electron BrowserWindow object instance.
+         * @type {Electron.BrowserWindow}
+         */
+        this.windowRef = new electron.BrowserWindow(config);
+
+        let self = this;
         //ensure focus on open.
-        self.windowRef.once('ready-to-show', () => {
+        this.windowRef.once('ready-to-show', () => {
             self.windowRef.show();
             self.windowRef.focus();
         });
         //window events
-        self.windowRef.on('closed', () => {
+        this.windowRef.on('closed', () => {
             self.windowRef = null //deref
         });
         //handle target="_blank" link clicks for external URLs
-        self.windowRef.webContents.on('new-window', function (e, url) {
+        this.windowRef.webContents.on('new-window', function (e, url) {
             e.preventDefault();
             electron.shell.openExternal(url);
         });

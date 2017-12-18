@@ -12,7 +12,10 @@ module.exports = class MainWindow extends Window {
             height: 440,
             fullscreenable: false,
             show: false,
-            backgroundColor: '#040404'
+            backgroundColor: '#040404',
+            webPreferences: {
+                preload: path.join(__dirname, '..', 'mvvm', 'autoloader.js')
+            }
         });
         let self = this;
         //set app menus
@@ -23,7 +26,6 @@ module.exports = class MainWindow extends Window {
     }
 
     menuTemplate() {
-        let config = new Config();
         let self = this;
         let template = [
             {
@@ -44,14 +46,8 @@ module.exports = class MainWindow extends Window {
                 ]
             },
             {
-                label: 'Wallet',
-                submenu: [
-
-                ]
-            },
-            {
                 label: 'Developer',
-                visible: config.development,
+                visible: Config.development,
                 submenu: [
                     { role: 'reload' },
                     { role: 'forcereload' },
@@ -75,9 +71,22 @@ module.exports = class MainWindow extends Window {
                         }
                     },
                     {
-                        label: 'Superlumen.org',
+                        label: 'How does Stellar Work?',
+                        click: function () {
+                            electron.shell.openExternal('https://www.stellar.org/how-it-works/stellar-basics/');
+                        }
+                    },
+                    { type: 'separator' },
+                    {
+                        label: 'Visit superlumen.org',
                         click: function () {
                             electron.shell.openExternal('http://www.superlumen.org');
+                        }
+                    },
+                    {
+                        label: 'Visit stellar.org',
+                        click: function () {
+                            electron.shell.openExternal('http://www.stellar.org');
                         }
                     },
                     { type: 'separator' },

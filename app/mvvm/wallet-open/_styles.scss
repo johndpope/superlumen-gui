@@ -1,0 +1,13 @@
+.view-wallet-open {
+    padding: 2rem 4rem 0 4rem;
+
+    .grid-container {
+        position: relative;
+        z-index: 0;
+    }
+
+    .cell-filename {
+        font-size: 80%;
+        padding-bottom: 0.5rem;
+    }
+}

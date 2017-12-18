@@ -1,7 +1,17 @@
 var process = require('process');
 
-module.exports = class Config {
-    constructor() {
-        this.development = !!process.env.SUPERLUMEN_ENV;
-    }
+module.exports = {
+
+    /**
+     * Indicates whether the application started in development mode.
+     * @type {Boolean}
+     * @default false
+     */
+    development: !!process.env.SUPERLUMEN_ENV,
+
+    /**
+     * The last wallet file loaded.
+     * @type {String} 
+     */
+    lastFile: null
 }

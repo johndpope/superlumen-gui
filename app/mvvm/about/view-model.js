@@ -1,4 +1,4 @@
-const ViewModel = require('../../structure/view-model.js');
+const ViewModel = require('../view-model.js');
 
 module.exports = class AboutViewModel extends ViewModel {
     constructor() {
