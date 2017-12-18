@@ -30,7 +30,7 @@
         "type": "git"
     },
     "homepage": "https://www.superlumen.org",
-    "license": "MIT",
+    "license": "MPL-2.0",
     "build": {
         "productName": "Superlumen",
         "copyright": "Copyright © 2017 The Superlumen Team",
