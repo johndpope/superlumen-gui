@@ -4,7 +4,7 @@ const SecureString = require('secure-string');
 module.exports = class Wallet {
 
     constructor() {
-        this.Version = 'A';
+        this.Version = 0;
         this.WalletFilePath = null;
         this.Password = null;
         this.KeyFilePath = null;

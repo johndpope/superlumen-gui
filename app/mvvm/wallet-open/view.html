@@ -16,9 +16,19 @@
             </div>
             <div class="medium-12 cell">
                 <div class="input-group">
-                    <input class="input-group-field" type="password" placeholder="Enter: Wallet Password">
+                    <input class="input-group-field text-password" type="password" placeholder="Enter: Wallet Password">
                     <div class="input-group-button">
-                        <button class="button" title="Include a key file."><i class="fa fa-key"></i></button>
+                        <button class="button button-key-file" title="Include a key file.">
+                            <i class="fa fa-key"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="medium-7 cell cell-2-factor">
+                <div class="input-group">
+                    <input type="text" class="input-group-field text-2-factor-code" placeholder="Enter: 2-Factor Code">
+                    <div class="input-group-button">
+                        <button class="button button-2-factor ffab fa-qrcode" title="Validate your 2-factor code phone your device (Authy/Google Auth/etc.)">Validate</button>
                     </div>
                 </div>
             </div>

@@ -65,13 +65,13 @@
 // 1. Global
 // ---------
 
-$global-font-size: 100%;
+$global-font-size: 80%;
 // $global-width: rem-calc(1200);
 // $global-lineheight: 1.5;
 $foundation-palette: (
   primary: #23282a,
-  secondary: #f5d801,
-  success: #3C3C3C,
+  secondary: #6e6000,
+  success: #f5d801,
   warning: #f0a600,
   alert: #cc4b37,
 );
@@ -82,7 +82,7 @@ $black: #0a0a0a;
 $white: #fefefe;
 $body-background: map-get($foundation-palette, primary);
 $body-font-color: $white;
-$body-font-family: 'Barlow', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+$body-font-family: 'Nunito', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
 $body-antialiased: true;
 // $global-margin: 1rem;
 // $global-padding: 1rem;
@@ -135,31 +135,31 @@ $body-antialiased: true;
 // $header-font-style: normal;
 // $font-family-monospace: Consolas, 'Liberation Mono', Courier, monospace;
 // $header-color: inherit;
-// $header-lineheight: 1.4;
+$header-lineheight: 1.6;
 // $header-margin-bottom: 0.5rem;
-// $header-styles: (
-//   small: (
-//     'h1': ('font-size': 24),
-//     'h2': ('font-size': 20),
-//     'h3': ('font-size': 19),
-//     'h4': ('font-size': 18),
-//     'h5': ('font-size': 17),
-//     'h6': ('font-size': 16),
-//   ),
-//   medium: (
-//     'h1': ('font-size': 48),
-//     'h2': ('font-size': 40),
-//     'h3': ('font-size': 31),
-//     'h4': ('font-size': 25),
-//     'h5': ('font-size': 20),
-//     'h6': ('font-size': 16),
-//   ),
-// );
+$header-styles: (
+  small: (
+    'h1': ('font-size': 24),
+    'h2': ('font-size': 20),
+    'h3': ('font-size': 19),
+    'h4': ('font-size': 18),
+    'h5': ('font-size': 17),
+    'h6': ('font-size': 16),
+  ),
+  medium: (
+    'h1': ('font-size': 38),
+    'h2': ('font-size': 30),
+    'h3': ('font-size': 21),
+    'h4': ('font-size': 18),
+    'h5': ('font-size': 17),
+    'h6': ('font-size': 16),
+  ),
+);
 // $header-text-rendering: optimizeLegibility;
 // $small-font-size: 80%;
 // $header-small-font-color: $medium-gray;
 // $paragraph-lineheight: 1.6;
-// $paragraph-margin-bottom: 1rem;
+$paragraph-margin-bottom: 1.6rem;
 // $paragraph-text-rendering: optimizeLegibility;
 // $code-color: $black;
 // $code-font-family: $font-family-monospace;
@@ -167,8 +167,8 @@ $body-antialiased: true;
 // $code-background: $light-gray;
 // $code-border: 1px solid $medium-gray;
 // $code-padding: rem-calc(2 5 1);
-$anchor-color: map-get($foundation-palette, secondary);
-$anchor-color-hover: scale-color($anchor-color, $lightness: -14%);
+$anchor-color: map-get($foundation-palette, success);
+$anchor-color-hover: scale-color($anchor-color, $lightness: -18%);
 $anchor-text-decoration: none;
 $anchor-text-decoration-hover: none;
 // $hr-width: $global-width;
@@ -436,7 +436,7 @@ $input-color: $white;
 // $input-line-height: $global-lineheight;
 $input-background: rgba(map-get($foundation-palette, primary), 0.8);
 $input-background-focus: rgba($input-background, 0.5);
-// $input-background-disabled: $light-gray;
+$input-background-disabled: rgba(map-get($foundation-palette, primary), 0.4);
 $input-border: 1px solid map-get($foundation-palette, primary);
 // $input-border-focus: 1px solid $dark-gray;
 // $input-padding: $form-spacing / 2;

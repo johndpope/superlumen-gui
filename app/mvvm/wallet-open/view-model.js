@@ -23,8 +23,9 @@ module.exports = class SetupViewModel extends ViewModel {
         //links
         $('#link-create-wallet').click(this, this.onCreateWalletClick);
         $('#link-open-wallet').click(this, this.onOpenWalletClick);
+        $('.button-unlock').click(this, this.onUnlockClick);
     }
-    
+
     onCreateWalletClick(e) {
         let self = e.data;
         let parent = self.parent; //hold onto ref after this view's teardown
@@ -37,6 +38,13 @@ module.exports = class SetupViewModel extends ViewModel {
     onOpenWalletClick(e) {
         let self = e.data;
         self.browseForWallet();
+    }
+
+    onUnlockClick(e) {
+        $('.button-unlock, .text-password, .button-key-file').prop('disabled', true);
+        $('.cell-2-factor').slideDown(function() {
+            $('.text-2-factor-code').focus().select();
+        });
     }
 
     browseForWallet() {

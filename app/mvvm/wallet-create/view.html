@@ -8,19 +8,56 @@
                 <a id="link-open-wallet">open an existing wallet</a>.
             </p>
         </div>
-        <div class="medium-12 cell">
-            <input type="password" placeholder="Enter: Wallet Password">
-        </div>
-        <div class="medium-12 cell">
-            <input type="password" placeholder="Confirm: Wallet Password">
-        </div>
-        <div class="medium-12 cell">
-            <div class="warning progress">
-                <div class="progress-meter" style="width: 55%"></div>
+    </div>
+</div>
+<div class="grid-container wizard">
+    <form data-abide class="wizard-step wizard-step-1 active" data-wizard-step="1">
+        <div class="grid-x grid-margin-x">
+            <div class="medium-12 cell">
+                <div class="input-wrapper">
+                <input name="text-password" type="password" placeholder="Enter: Wallet Password" required>
+                <small class="error"></small>
+            </div>
+            </div>
+            <div class="medium-12 cell">
+                <div class="input-group">
+                    <input name="text-password-confirm" class="input-group-field" type="password" placeholder="Confirm: Wallet Password" required>
+                    <span class="input-group-label">
+                        <i class="fa fa-warning"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="medium-12 cell">
+                <div class="alert progress">
+                    <div class="progress-meter" style="width: 0%">
+                        <p class="progress-meter-text"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="medium-12 cell text-right">
+                <button class="button secondary button-key-file ffab fa-key">Add Key-File</button>
+                <button class="button secondary button-key-file-generate" title="Generate a new key file."><i class="fa fa-plus"></i></button>
+            </div>
+            <div class="medium-12 cell text-right">
+                <button class="button button-next ffab fa-chevron-right">Next: 2-Factor Authentication</button>
             </div>
         </div>
-        <div class="medium-12 cell text-right">
-            <button class="button ffab fa-chevron-right">Additional Authentication</button>
+    </form>
+    <div class="wizard-step wizard-step-2" data-wizard-step="2">
+        <div class="grid-x grid-margin-x">
+            <div class="medium-7 cell">
+                <div class="switch">
+                    <label>Use 2-Factor Authentication?</label>
+                    <input class="switch-input" id="yes-no" type="checkbox" name="exampleSwitch">
+                    <label class="switch-paddle" for="yes-no">
+                        <span class="switch-active" aria-hidden="true">Yes</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                    </label>
+                </div>
+            </div>
+            <div class="medium-12 cell text-right">
+                <button class="button ffab fa-chevron-right">Next: Recovery</button>
+            </div>
         </div>
     </div>
 </div>

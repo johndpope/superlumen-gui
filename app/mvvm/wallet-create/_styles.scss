@@ -6,6 +6,14 @@
         position: relative;
         z-index: 0;
     }
+
+    .wizard {
+        .wizard-step-1 {
+            .progress {
+                display: none;
+            }
+        }
+    }
 }
 
 body#main {
