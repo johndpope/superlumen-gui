@@ -13,5 +13,12 @@ module.exports = {
      * The last wallet file loaded.
      * @type {String} 
      */
-    lastFile: null
+    lastFile: null,
+
+    /**
+     * The theme applied.
+     * @type {String} 
+     */
+    theme: 'dark'
+    
 }

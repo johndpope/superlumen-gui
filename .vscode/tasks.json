@@ -4,10 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build SASS",
-            "type": "shell",
-            "command": "npm run sass",
-            "args": []
+            "label": "sass",
+            "type": "npm",
+            "script": "sass"
         }
     ]
 }
