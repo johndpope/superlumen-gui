@@ -7,11 +7,11 @@ Check out our [milestones](https://github.com/super-lumen/superlumen-gui/milesto
 
 #### Open Wallet Preview:
 Our password, key-file, and yep, even 2-factor authentication protection for your wallet.  
-![Preview](https://thumbs.gfycat.com/OblongBelovedFinnishspitz-max-14mb.gif)
+![Preview](https://thumbs.gfycat.com/OblongBelovedFinnishspitz-size_restricted.gif)
 
 #### New Wallet Preview:
 Creating a new wallet will be a breeze.  
-![Preview](https://thumbs.gfycat.com/ThreadbareDetailedBlowfish-max-14mb.gif)
+![Preview](https://thumbs.gfycat.com/ThreadbareDetailedBlowfish-size_restricted.gif)
 
 > #### Support the free and open development of Superlumen
 > We accept, you guessed it, Lumens (XLM) ! 
