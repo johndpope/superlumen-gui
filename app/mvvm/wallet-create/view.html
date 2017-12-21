@@ -11,13 +11,13 @@
     </div>
 </div>
 <div class="grid-container wizard">
-    <form data-abide class="wizard-step wizard-step-1 active" data-wizard-step="1">
+    <section class="wizard-step active wizard-step-password">
         <div class="grid-x grid-margin-x">
             <div class="medium-12 cell">
                 <div class="input-wrapper">
-                <input name="text-password" type="password" placeholder="Enter: Wallet Password" required>
-                <small class="error"></small>
-            </div>
+                    <input name="text-password" type="password" placeholder="Enter: Wallet Password" required>
+                    <small class="error"></small>
+                </div>
             </div>
             <div class="medium-12 cell">
                 <div class="input-group">
@@ -36,28 +36,56 @@
             </div>
             <div class="medium-12 cell text-right">
                 <button class="button secondary button-key-file ffab fa-key">Add Key-File</button>
-                <button class="button secondary button-key-file-generate" title="Generate a new key file."><i class="fa fa-plus"></i></button>
+                <button class="button secondary button-key-file-generate" title="Generate &amp; add a key file.">
+                    <i class="fa fa-plus"></i>
+                </button>
             </div>
             <div class="medium-12 cell text-right">
-                <button class="button button-next ffab fa-chevron-right">Next: 2-Factor Authentication</button>
+                <button class="button button-go-recovery ffab fa-chevron-right">Next: Recovery</button>
             </div>
         </div>
-    </form>
-    <div class="wizard-step wizard-step-2" data-wizard-step="2">
+    </section>
+    <section class="wizard-step wizard-step-recovery">
         <div class="grid-x grid-margin-x">
             <div class="medium-7 cell">
+                Add Recovery Answers?
+            </div>
+            <div class="medium-5 cell">
                 <div class="switch">
-                    <label>Use 2-Factor Authentication?</label>
                     <input class="switch-input" id="yes-no" type="checkbox" name="exampleSwitch">
                     <label class="switch-paddle" for="yes-no">
-                        <span class="switch-active" aria-hidden="true">Yes</span>
-                        <span class="switch-inactive" aria-hidden="true">No</span>
+                        <span class="switch-active" aria-hidden="true">No</span>
+                        <span class="switch-inactive" aria-hidden="true">Yes</span>
                     </label>
                 </div>
             </div>
-            <div class="medium-12 cell text-right">
-                <button class="button ffab fa-chevron-right">Next: Recovery</button>
+            <div class="medium-12 cell">
+                If you lose your password and/or key file, you may still need to access your account(s). You can setup questions and answers
+                that will encrypt your critical Stellar account data for recovery. 
+                <hr />
+            </div>
+            <div class="medium-12 cell">
+                <button class="button secondary button-setup-recovery ffab fa-gear">Setup Recovery Q&amp;A</button>
+            </div>
+            <div class="medium-6 cell text-left">
+                <button class="button button-go-password ffab before fa-chevron-left">Back</button>
+            </div>
+            <div class="medium-6 cell text-right">
+                <button class="button button-go-accounts ffab fa-chevron-right">Next: Add Accounts</button>
             </div>
         </div>
-    </div>
+    </section>
+    <section class="wizard-step wizard-step-accounts">
+        <div class="grid-x grid-margin-x">
+            <div class="medium-12 cell">
+                
+            </div>
+            <div class="medium-6 cell text-left">
+                <button class="button button-go-password ffab before fa-chevron-left">Back</button>
+            </div>
+            <div class="medium-6 cell text-right">
+                <button class="button button-go-complete ffab fa-chevron-right">Done: Save &amp; Open</button>
+            </div>
+        </div>
+    </section>
 </div>

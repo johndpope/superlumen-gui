@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require("crypto");
 const { dialog } = require('electron').remote;
+const RecoverQuestionsWindow = require('../../windows/recovery-questions-window.js');
 const ViewModel = require('../view-model.js');
 
 const MinKeyFileSize = 32;
@@ -28,6 +29,10 @@ module.exports = class WalletCreateViewModel extends ViewModel {
         $('input[name="text-password-confirm"]').keyup(this, this.onPasswordConfirmChange);
         $('.button-key-file').click(this, this.onKeyFileClick);
         $('.button-key-file-generate').click(this, this.onKeyFileGenerateClick);
+        $('.button-go-password').click(this, this.onWizardToPassword);
+        $('.button-go-recovery').click(this, this.onWizardToRecovery);
+        $('.button-go-accounts').click(this, this.onWizardToAccounts);
+        $('.button-setup-recovery').click(this, this.onSetupRecoveryClick);
     }
 
     onPasswordChange(e) {
@@ -43,15 +48,21 @@ module.exports = class WalletCreateViewModel extends ViewModel {
             (numCount > 0 ? 0.1 : 0) +
             (splCount > 0 ? 0.1 : 0) +
             ((pw.length > 10 ? 1 : pw.length / 10) * 0.6);
-        $('.progress').show().removeClass('alert warning success');
+        $('.progress').show().removeClass('alert warning primary');
+        let text = '';
         if (strength <= 0.4) {
             $('.progress').addClass('alert');
+            text = (strength > 0.2 ? 'weak' : '');
+        } else if (strength <= 0.6) {
+            $('.progress').addClass('warning');
+            text = 'medium';
         } else if (strength <= 0.8) {
             $('.progress').addClass('warning');
+            text = 'strong';
         } else {
-            $('.progress').addClass('success');
+            $('.progress').addClass('primary');
+            text = 'great';
         }
-        $('.progress-meter-text').text(`${strength < 0.2 ? '' : strength < 0.4 ? 'low' : strength < 0.6 ? 'medium' : strength < 0.8 ? 'strong' : 'great'}`);
         $('.progress .progress-meter').css('width', (strength * 100) + '%');
         self.onPasswordConfirmChange(e);
     }
@@ -94,7 +105,7 @@ module.exports = class WalletCreateViewModel extends ViewModel {
                 } else {
                     button
                         .data('file-name', fileName)
-                        .text('Clear Key-File')
+                        .text('Remove Key-File')
                         .removeClass('fa-key')
                         .addClass('fa-trash');
                 }
@@ -167,4 +178,31 @@ module.exports = class WalletCreateViewModel extends ViewModel {
             });
         });
     }
+
+    onWizardToPassword(e) {
+        $('.wizard .wizard-step:not(.wizard-step-password)').fadeOut(function () {
+            $('.wizard .wizard-step:not(.wizard-step-password)').hide();
+            $('.wizard .wizard-step-password').fadeIn();
+        });
+    }
+
+    onWizardToRecovery(e) {
+        $('.wizard .wizard-step:not(.wizard-step-recovery)').fadeOut(function () {
+            $('.wizard .wizard-step:not(.wizard-step-recovery)').hide();
+            $('.wizard .wizard-step-recovery').fadeIn();
+        });
+    }
+
+    onWizardToAccounts(e) {
+        $('.wizard .wizard-step:not(.wizard-step-accounts)').fadeOut(function () {
+            $('.wizard .wizard-step:not(.wizard-step-accounts)').hide();
+            $('.wizard .wizard-step-accounts').fadeIn();
+        });
+    }
+
+    onSetupRecoveryClick(e) {
+        let mainWindow = require('electron').remote.getCurrentWindow().window;
+        mainWindow.showRecoveryQuestions();
+    }
+
 }

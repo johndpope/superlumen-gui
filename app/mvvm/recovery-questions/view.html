@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Setup Recovery Q&amp;A</title>
+    <link href="../../assets/css/theme-dark.css" rel="stylesheet" type="text/css" />
+    <script>
+        window.$ = window.jQuery = require('jquery');
+    </script>
+    <script src="../../../node_modules/foundation-sites/dist/js/foundation.min.js"></script>
+</head>
+
+<body id="recovery-questions">
+    <div class="grid-container">
+        <div class="grid-x grid-padding-x">
+            <div class="medium-12 cell">
+                <p>
+                    Create your own set of questions and answers so you can recover critical Stellar account details. The answers you provide
+                    form a password used to encrypt your account information, so be sure to add questions and answers that
+                    only you would know.
+                </p>
+                <h4>Here's some guidelines to help:</h4>
+                <ol>
+                    <li>Ask questions that you'll know the answer to years from now. Recovery is useless if you can't answer
+                        your own questions.</li>
+                    <li>Try to ask questions that include numbers, upper-case, or even special characters (remember guideline
+                        #1 though!)</li>
+                    <li>Ask lots of questions, the more, the better!</li>
+                    <li>It's ok to ask questions with short or one-word answers, but remember guideline #3!</li>
+                </ol>
+                <hr />
+            </div>
+            <div class="medium-12 cell">
+                <table class="list">
+                    <thead>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" placeholder="Enter: Question" maxlength="128" />
+                            </td>
+                            <td>
+                                <input type="text" placeholder="Enter: Answer" maxlength="896" />
+                            </td>
+                            <td class="text-right">
+                                <button class="button">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-right">
+                                <button class="button">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </td>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="medium-6 cell text-left">
+                <button class="button button-support ffab fa-times">Cancel</button>
+            </div>
+            <div class="medium-6 cell text-right">
+                <button class="button button-support ffab fa-save">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

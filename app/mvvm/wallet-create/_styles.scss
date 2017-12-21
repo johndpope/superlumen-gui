@@ -1,6 +1,6 @@
 .view-wallet-create {
     padding: 2rem 4rem 0 4rem;
-    padding-left: 35%;
+    padding-left: 38%;
 
     .grid-container {
         position: relative;
@@ -8,9 +8,17 @@
     }
 
     .wizard {
-        .wizard-step-1 {
+        .wizard-step-password {
             .progress {
                 display: none;
+            }
+        }
+
+        .wizard-step-2-factor {
+            .span-2-factor-image {
+                display: block;
+                height: 140px;
+                margin-bottom: 2rem;
             }
         }
     }
@@ -19,7 +27,7 @@
 body#main {
     .active-wallet-create {
         .logo {
-            left: -700px;
+            left: -760px;
             opacity: 0.45;
         }
     }

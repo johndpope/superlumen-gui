@@ -17,6 +17,7 @@ module.exports = class Window {
          */
         this.windowRef = new electron.BrowserWindow(config);
 
+        this.windowRef.window = this;
         let self = this;
         //ensure focus on open.
         this.windowRef.once('ready-to-show', () => {

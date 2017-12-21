@@ -113,7 +113,6 @@
         "foundation-font-awesome-buttons": "^3.3.2",
         "foundation-sites": "^6.4.4-rc1",
         "jquery": "^3.2.1",
-        "node-2fa": "^1.1.2",
         "secure-string": "^1.2.1"
     },
     "devDependencies": {

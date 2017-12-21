@@ -431,7 +431,7 @@ $select-triangle-color: $white;
 $input-color: $white;
 // $input-placeholder-color: $medium-gray;
 // $input-font-family: inherit;
-// $input-font-size: rem-calc(16);
+$input-font-size: 1rem;
 // $input-font-weight: $global-weight-normal;
 // $input-line-height: $global-lineheight;
 $input-background: rgba(map-get($foundation-palette, primary), 0.8);
@@ -755,8 +755,8 @@ $input-border: 1px solid map-get($foundation-palette, primary);
 // 49. Switch
 // ----------
 
-// $switch-background: $medium-gray;
-// $switch-background-active: $primary-color;
+$switch-background: map-get($foundation-palette, secondary);
+$switch-background-active: map-get($foundation-palette, primary);
 // $switch-height: 2rem;
 // $switch-height-tiny: 1.5rem;
 // $switch-height-small: 1.75rem;
@@ -771,7 +771,7 @@ $input-border: 1px solid map-get($foundation-palette, primary);
 // 50. Table
 // ---------
 
-// $table-background: $white;
+$table-background: rgba(#333333, 0.2);
 // $table-color-scale: 5%;
 // $table-border: 1px solid smart-scale($table-background, $table-color-scale);
 // $table-padding: rem-calc(8 10 10);

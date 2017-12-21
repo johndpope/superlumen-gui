@@ -6201,7 +6201,7 @@ textarea {
   display: block;
   box-sizing: border-box;
   width: 100%;
-  height: 3.04688rem;
+  height: 2.67188rem;
   margin: 0 0 1.25rem;
   padding: 0.625rem;
   border: 1px solid #23282a;
@@ -6209,7 +6209,7 @@ textarea {
   background-color: rgba(35, 40, 42, 0.8);
   box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
   font-family: inherit;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: normal;
   line-height: 1.5;
   color: #fefefe;
@@ -6371,7 +6371,7 @@ label.middle {
   align-self: stretch;
   padding-top: 0;
   padding-bottom: 0;
-  font-size: 1.25rem;
+  font-size: 1rem;
 }
 
 fieldset {
@@ -6398,7 +6398,7 @@ legend {
 }
 
 select {
-  height: 3.04688rem;
+  height: 2.67188rem;
   margin: 0 0 1.25rem;
   padding: 0.625rem;
   appearance: none;
@@ -6406,7 +6406,7 @@ select {
   border-radius: 0;
   background-color: rgba(35, 40, 42, 0.8);
   font-family: inherit;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: normal;
   line-height: 1.5;
   color: #fefefe;
@@ -9151,7 +9151,7 @@ html.is-reveal-open body {
   width: 4rem;
   height: 2rem;
   border-radius: 0;
-  background: #cacaca;
+  background: #6e6000;
   transition: all 0.25s ease-out;
   font-weight: inherit;
   color: inherit;
@@ -9282,8 +9282,8 @@ table {
 }
 
 thead, tbody, tfoot {
-  border: 1px solid #f1f1f1;
-  background-color: #fefefe;
+  border: 1px solid rgba(61, 61, 61, 0.2);
+  background-color: rgba(51, 51, 51, 0.2);
 }
 
 caption {
@@ -9292,12 +9292,12 @@ caption {
 }
 
 thead {
-  background: #f8f8f8;
+  background: rgba(56, 56, 56, 0.2);
   color: #fefefe;
 }
 
 tfoot {
-  background: #f1f1f1;
+  background: rgba(61, 61, 61, 0.2);
   color: #fefefe;
 }
 
@@ -9317,17 +9317,17 @@ tbody th, tbody td {
 
 tbody tr:nth-child(even) {
   border-bottom: 0;
-  background-color: #f1f1f1;
+  background-color: rgba(61, 61, 61, 0.2);
 }
 
 table.unstriped tbody {
-  background-color: #fefefe;
+  background-color: rgba(51, 51, 51, 0.2);
 }
 
 table.unstriped tbody tr {
   border-bottom: 0;
-  border-bottom: 1px solid #f1f1f1;
-  background-color: #fefefe;
+  border-bottom: 1px solid rgba(61, 61, 61, 0.2);
+  background-color: rgba(51, 51, 51, 0.2);
 }
 
 @media screen and (max-width: 63.9375em) {
@@ -9354,19 +9354,19 @@ table.scroll {
 }
 
 table.hover thead tr:hover {
-  background-color: #f3f3f3;
+  background-color: rgba(51, 51, 51, 0.2);
 }
 
 table.hover tfoot tr:hover {
-  background-color: #ececec;
+  background-color: rgba(56, 56, 56, 0.2);
 }
 
 table.hover tbody tr:hover {
-  background-color: #f9f9f9;
+  background-color: rgba(46, 46, 46, 0.2);
 }
 
 table.hover:not(.unstriped) tr:nth-of-type(even):hover {
-  background-color: #ececec;
+  background-color: rgba(33, 33, 33, 0.2);
 }
 
 .table-scroll {
@@ -10425,6 +10425,10 @@ a.thumbnail image {
   transition: border-color 0.25s ease-out;
 }
 
+.switch {
+  font-weight: normal;
+}
+
 .wizard .wizard-step {
   display: none;
 }
@@ -10523,9 +10527,13 @@ body#main .logo {
   }
 }
 
+body#recovery-questions {
+  text-align: left;
+}
+
 .view-wallet-create {
   padding: 2rem 4rem 0 4rem;
-  padding-left: 35%;
+  padding-left: 38%;
 }
 
 .view-wallet-create .grid-container {
@@ -10533,12 +10541,18 @@ body#main .logo {
   z-index: 0;
 }
 
-.view-wallet-create .wizard .wizard-step-1 .progress {
+.view-wallet-create .wizard .wizard-step-password .progress {
   display: none;
 }
 
+.view-wallet-create .wizard .wizard-step-2-factor .span-2-factor-image {
+  display: block;
+  height: 140px;
+  margin-bottom: 2rem;
+}
+
 body#main .active-wallet-create .logo {
-  left: -700px;
+  left: -760px;
   opacity: 0.45;
 }
 

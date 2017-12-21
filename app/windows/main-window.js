@@ -4,11 +4,12 @@ const electron = require('electron');
 const Config = require('../data/config.js');
 const Window = require('./window.js');
 const AboutWindow = require('./about-window.js');
+const RecoveryQuestionsWindow = require('./recovery-questions-window.js');
 
 module.exports = class MainWindow extends Window {
     constructor() {
         super({
-            width: 700,
+            width: 760,
             height: 440,
             fullscreenable: false,
             show: false,
@@ -23,6 +24,16 @@ module.exports = class MainWindow extends Window {
         electron.Menu.setApplicationMenu(menu);
         //load the main view
         this.loadView('main');
+    }
+
+    showAbout() {
+        var popup = new AboutWindow(this);
+        popup.show();       
+    }
+
+    showRecoveryQuestions() {
+        let win = new RecoveryQuestionsWindow(this);
+        win.show();
     }
 
     menuTemplate() {
@@ -93,8 +104,7 @@ module.exports = class MainWindow extends Window {
                     {
                         label: 'About',
                         click: function () {
-                            var popup = new AboutWindow(self);
-                            popup.show();
+                            self.showAbout();
                         }
                     }
                 ]
