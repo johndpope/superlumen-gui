@@ -1,6 +1,7 @@
 const path = require('path');
 const url = require('url');
 const electron = require('electron');
+const Wallet = require('../data/wallet.js');
 const Config = require('../data/config.js');
 const Window = require('./window.js');
 const AboutWindow = require('./about-window.js');
@@ -18,6 +19,12 @@ module.exports = class MainWindow extends Window {
                 preload: path.join(__dirname, '..', 'mvvm', 'autoloader.js')
             }
         });
+
+        /**
+         * @type {Wallet}
+         */
+        this.Wallet = null;
+
         let self = this;
         //set app menus
         let menu = electron.Menu.buildFromTemplate(this.menuTemplate());
@@ -31,8 +38,8 @@ module.exports = class MainWindow extends Window {
         popup.show();       
     }
 
-    showRecoveryQuestions() {
-        let win = new RecoveryQuestionsWindow(this);
+    showRecoveryQuestions(wallet) {
+        let win = new RecoveryQuestionsWindow(this, wallet);
         win.show();
     }
 

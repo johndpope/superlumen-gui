@@ -9151,7 +9151,7 @@ html.is-reveal-open body {
   width: 4rem;
   height: 2rem;
   border-radius: 0;
-  background: #6e6000;
+  background: #23282a;
   transition: all 0.25s ease-out;
   font-weight: inherit;
   color: inherit;
@@ -9177,7 +9177,7 @@ input + .switch-paddle {
 }
 
 input:checked ~ .switch-paddle {
-  background: #23282a;
+  background: #6e6000;
 }
 
 input:checked ~ .switch-paddle::after {
@@ -10429,6 +10429,10 @@ a.thumbnail image {
   font-weight: normal;
 }
 
+.switch label {
+  font-size: 70%;
+}
+
 .wizard .wizard-step {
   display: none;
 }
@@ -10449,6 +10453,19 @@ body {
 
 body button:focus, body button:active:focus, body button.active:focus, body button.focus, body button:active.focus, body button.active.focus, body input:focus, body input:active:focus, body input.active:focus, body input.focus, body input:active.focus, body input.active.focus, body a:focus, body a:active:focus, body a.active:focus, body a.focus, body a:active.focus, body a.active.focus {
   outline-color: #f4de01 !important;
+}
+
+body::-webkit-scrollbar {
+  width: 1em;
+}
+
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #262626;
+  outline: 1px solid #444444;
 }
 
 body#about {

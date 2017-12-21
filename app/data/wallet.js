@@ -1,14 +1,25 @@
 const fs = require('fs');
-const SecureString = require('secure-string');
+const crypto = require('crypto');
 
 module.exports = class Wallet {
 
     constructor() {
-        this.Version = 0;
-        this.WalletFilePath = null;
-        this.Password = null;
-        this.KeyFilePath = null;
-        this.Accounts = [];
+        this.version = 0;
+        this.salt = null;
+        this.walletFilePath = null;
+        this.password = null;
+        this.keyFilePath = null;
+        this.accounts = [];
+        this.recovery = null;
+    }
+
+    setPassword(passwordPlainText) {
+        if (!this.salt) {
+            this.salt = crypto.randomBytes(Math.random() * (64 - 128) + 64).toString('hex');
+        }
+        let shasum = crypto.createHash('sha512');
+        shasum.update(Buffer.concat([new Buffer(passwordPlainText, 'utf8'), this.salt]));
+        this.password = shasum.digest('hex');
     }
 
     /**
@@ -28,26 +39,17 @@ module.exports = class Wallet {
         } else if (keyFilePath && fs.existsSync(keyFilePath) === false) {
             throw new Error('The key file path specified does not exist or is inaccessible.');
         }
-        this.WalletFilePath = walletFilePath;
-        this.Password = password;
-        this.KeyFilePath = keyFilePath;
-        this.Accounts = [];
-        //decrypt the wallet
-        password.value(plainText => {
-            //load the key file if specified.
-            if (keyFilePath) {
-                var keyFileBuf = fs.readFileSync(keyFilePath);
-            }
-            plainText.toString();
-            //TODO read
-        });
+        this.walletFilePath = walletFilePath;
+        this.password = password;
+        this.keyFilePath = keyFilePath;
+        this.accounts = [];
     }
 
     /**
      * Saves the wallet.
      */
-    save(walletFilePath) {
-        if (!this.WalletFilePath) {
+    save(filePath) {
+        if (!this.walletFilePath) {
             throw new Error('The wallet file path is not specified.');
         } else if (!password) {
             throw new Error('A wallet password is required.');
@@ -57,7 +59,7 @@ module.exports = class Wallet {
             throw new Error('The key file path specified does not exist or is inaccessible.');
         }
         //TODO save
-        this.WalletFilePath = walletFilePath;
+        this.walletFilePath = filePath ? filePath : this.walletFilePath;
     }
 
 }

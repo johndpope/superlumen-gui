@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require("crypto");
 const { dialog } = require('electron').remote;
+const Wallet = require('../../data/wallet.js');
+const Recovery = require('../../data/recovery.js');
 const RecoverQuestionsWindow = require('../../windows/recovery-questions-window.js');
 const ViewModel = require('../view-model.js');
 
@@ -12,6 +14,11 @@ const GeneratedFileSize = 1024 * 4;
 module.exports = class WalletCreateViewModel extends ViewModel {
     constructor() {
         super(__filename);
+
+        /**
+         * @type {Wallet}
+         */
+        this.Wallet = new Wallet();
     }
 
     static init() {
@@ -32,6 +39,7 @@ module.exports = class WalletCreateViewModel extends ViewModel {
         $('.button-go-password').click(this, this.onWizardToPassword);
         $('.button-go-recovery').click(this, this.onWizardToRecovery);
         $('.button-go-accounts').click(this, this.onWizardToAccounts);
+        $('.wizard .wizard-step-recovery input[type="checkbox"]').change(this, this.onRecoveryChecked);
         $('.button-setup-recovery').click(this, this.onSetupRecoveryClick);
     }
 
@@ -187,13 +195,32 @@ module.exports = class WalletCreateViewModel extends ViewModel {
     }
 
     onWizardToRecovery(e) {
+        let self = e.data;
+        if (!self.Wallet.recovery) {
+            self.Wallet.recovery = new Recovery();
+        }
+        let recoveryEnabled = $('.wizard .wizard-step-recovery input[type="checkbox"]').is(':checked');
+        $('.wizard .wizard-step-recovery .button-go-accounts').prop('disabled', recoveryEnabled || (recoveryEnabled && !self.Wallet.recovery.questions));
         $('.wizard .wizard-step:not(.wizard-step-recovery)').fadeOut(function () {
             $('.wizard .wizard-step:not(.wizard-step-recovery)').hide();
             $('.wizard .wizard-step-recovery').fadeIn();
         });
     }
 
+    onRecoveryChecked(e) {
+        let recoveryEnabled = $('.wizard .wizard-step-recovery input[type="checkbox"]').is(':checked');
+        $('.wizard .wizard-step-recovery .button-go-accounts').prop('disabled', recoveryEnabled || (recoveryEnabled && !self.Wallet.recovery.questions));
+        $('.wizard .wizard-step-recovery .button-setup-recovery').prop('disabled', !recoveryEnabled);
+    }
+
     onWizardToAccounts(e) {
+        let self = e.data;
+        //set wallet recovery
+        let recoveryEnabled = ($('.wizard .wizard-step-recovery input[type="checkbox"]').is(':checked'));
+        if (recoveryEnabled === false) {
+            self.Wallet.recovery = null;
+        }
+        //move to next step
         $('.wizard .wizard-step:not(.wizard-step-accounts)').fadeOut(function () {
             $('.wizard .wizard-step:not(.wizard-step-accounts)').hide();
             $('.wizard .wizard-step-accounts').fadeIn();
@@ -201,8 +228,9 @@ module.exports = class WalletCreateViewModel extends ViewModel {
     }
 
     onSetupRecoveryClick(e) {
+        let self = e.data;
         let mainWindow = require('electron').remote.getCurrentWindow().window;
-        mainWindow.showRecoveryQuestions();
+        mainWindow.showRecoveryQuestions(self.Wallet);
     }
 
 }

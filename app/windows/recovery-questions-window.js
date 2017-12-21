@@ -1,10 +1,11 @@
 var path = require('path');
 var url = require('url');
 var electron = require('electron');
+const Wallet = require('../data/wallet.js');
 var Window = require('./window.js');
 
 module.exports = class RecoveryQuestionsWindow extends Window {
-    constructor(parent) {
+    constructor(parent, wallet) {
         super({
             width: 640,
             height: 490,
@@ -21,7 +22,13 @@ module.exports = class RecoveryQuestionsWindow extends Window {
                 preload: path.join(__dirname, '..', 'mvvm', 'autoloader.js')
             }
         });
-        this.windowRef.setMenu(null); //no menu
+
+        /**
+         * @type {Wallet}
+         */
+        this.Wallet = wallet;
+
+        //this.windowRef.setMenu(null); //no menu
         //load the about view
         this.loadView('recovery-questions');
     }

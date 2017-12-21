@@ -755,8 +755,8 @@ $input-border: 1px solid map-get($foundation-palette, primary);
 // 49. Switch
 // ----------
 
-$switch-background: map-get($foundation-palette, secondary);
-$switch-background-active: map-get($foundation-palette, primary);
+$switch-background: map-get($foundation-palette, primary);
+$switch-background-active: map-get($foundation-palette, secondary);
 // $switch-height: 2rem;
 // $switch-height-tiny: 1.5rem;
 // $switch-height-small: 1.75rem;

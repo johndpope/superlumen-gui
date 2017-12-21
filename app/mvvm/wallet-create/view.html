@@ -48,14 +48,14 @@
     <section class="wizard-step wizard-step-recovery">
         <div class="grid-x grid-margin-x">
             <div class="medium-7 cell">
-                Add Recovery Answers?
+                Add Recovery ?
             </div>
             <div class="medium-5 cell">
                 <div class="switch">
-                    <input class="switch-input" id="yes-no" type="checkbox" name="exampleSwitch">
+                    <input class="switch-input" id="yes-no" type="checkbox" name="checkbox-recovery" checked>
                     <label class="switch-paddle" for="yes-no">
-                        <span class="switch-active" aria-hidden="true">No</span>
-                        <span class="switch-inactive" aria-hidden="true">Yes</span>
+                        <span class="switch-active" aria-hidden="true">Yes</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
                     </label>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 <button class="button button-go-password ffab before fa-chevron-left">Back</button>
             </div>
             <div class="medium-6 cell text-right">
-                <button class="button button-go-accounts ffab fa-chevron-right">Next: Add Accounts</button>
+                <button class="button button-go-accounts ffab fa-chevron-right" disabled>Next: Add Accounts</button>
             </div>
         </div>
     </section>
@@ -81,10 +81,10 @@
                 
             </div>
             <div class="medium-6 cell text-left">
-                <button class="button button-go-password ffab before fa-chevron-left">Back</button>
+                <button class="button button-go-recovery ffab before fa-chevron-left">Back</button>
             </div>
             <div class="medium-6 cell text-right">
-                <button class="button button-go-complete ffab fa-chevron-right">Done: Save &amp; Open</button>
+                <button class="button button-complete ffab fa-chevron-right">Done: Save &amp; Open</button>
             </div>
         </div>
     </section>
