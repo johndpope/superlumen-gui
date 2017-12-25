@@ -6,18 +6,18 @@ const watch = require('node-watch');
 //theme paths (relative to this script file).
 let themes = [
     {
-        sass: '../app/assets/scss/dark/main.scss',
-        css: '../app/assets/css/theme-dark.css'
+        sass: '../app/rendered/assets/scss/dark/main.scss',
+        css: '../app/rendered/assets/css/theme-dark.css'
     },
     {
-        sass: '../app/assets/scss/light/main.scss',
-        css: '../app/assets/css/theme-light.css'
+        sass: '../app/rendered/assets/scss/light/main.scss',
+        css: '../app/rendered/assets/css/theme-light.css'
     }
 ];
 //paths to watch for *.css or *.scss changes.
 let watchPaths = [
-    { path: '../app/assets/scss', recursive: true },
-    { path: '../app/mvvm', recursive: true }
+    { path: '../app/rendered/assets/scss', recursive: true },
+    { path: '../app/rendered/templates', recursive: true }
 ]
 let scriptPath = path.dirname(require.main.filename);
 

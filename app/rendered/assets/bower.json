@@ -1,0 +1,23 @@
+{
+  "name": "superlumen-gui",
+  "authors": [
+    "Super-Lumen <contact@superlumen.org>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MPL-2.0",
+  "homepage": "https://www.superlumen.org",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "foundation-sites": "^6.4.3",
+    "foundation-font-awesome-buttons": "^3.3.1",
+    "fontawesome": "^4.7.0"
+  }
+}

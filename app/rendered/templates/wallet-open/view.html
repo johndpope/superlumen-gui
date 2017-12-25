@@ -1,0 +1,40 @@
+<div class="open-wallet">
+    <div class="grid-container">
+        <div class="grid-x grid-margin-x">
+            <div class="medium-12 cell">
+                <h1>Open Wallet</h1>
+                <p>
+                    Unlock your wallet using your password below.
+                    <br /> You can also
+                    <a id="link-create-wallet">create a new wallet</a> or
+                    <a id="link-open-wallet">open a different wallet</a>.
+                </p>
+            </div>
+            <div class="medium-12 cell cell-filename">
+                Wallet:
+                <span class="filename"></span>
+            </div>
+            <div class="medium-12 cell">
+                <div class="input-group">
+                    <input class="input-group-field text-password" type="password" placeholder="Enter: Wallet Password" rv-value="password">
+                    <div class="input-group-button">
+                        <button class="button button-key-file" title="Include a key file.">
+                            <i class="fa fa-key"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="medium-7 cell cell-2-factor">
+                <div class="input-group">
+                    <input type="text" class="input-group-field text-2-factor-code" placeholder="Enter: 2-Factor Code">
+                    <div class="input-group-button">
+                        <button class="button button-2-factor ffab fa-qrcode" title="Validate your 2-factor code phone your device (Authy/Google Auth/etc.)">Validate</button>
+                    </div>
+                </div>
+            </div>
+            <div class="medium-12 cell">
+                <button class="button button-unlock ffab fa-unlock" title="Unlock (decrypt) the selected wallet.">Unlock</button>
+            </div>
+        </div>
+    </div>
+</div>
