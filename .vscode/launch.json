@@ -6,7 +6,7 @@
             "type": "node",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "preLaunchTask": "sass",
+            "preLaunchTask": "rollup",
             "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
             "windows": {
                 "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"

@@ -15,7 +15,7 @@ module.exports = class MainWindow extends Window {
             show: false,
             backgroundColor: '#040404',
             webPreferences: {
-                preload: path.join(Config.templatePath, 'autoloader.js')
+                nodeIntegration: false
             }
         });
 

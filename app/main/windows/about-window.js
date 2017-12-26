@@ -19,7 +19,7 @@ module.exports = class AboutWindow extends Window {
             show: false,
             backgroundColor: '#040404',
             webPreferences: {
-                preload: path.join(Config.templatePath, 'autoloader.js')
+                nodeIntegration: false
             }
         });
         this.windowRef.setMenu(null); //no menu

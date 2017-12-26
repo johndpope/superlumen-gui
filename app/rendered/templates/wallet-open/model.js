@@ -1,5 +1,5 @@
 
-module.exports = class WalletOpenModel {
+export default class WalletOpenModel {
     constructor() {
         this.password = null;
         this.keyFilePath = null;

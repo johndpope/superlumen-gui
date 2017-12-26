@@ -1,31 +1,8 @@
-const ViewModel = require('../view-model.js');
-const Animation = require('../../dom/animation.js');
+import * as Model from './model';
 
-module.exports = class MainViewModel extends ViewModel {
+export default class MainViewModel {
     constructor() {
-        super(__filename);
+        console.log('vm');
+        new Model();
     }
-
-    static init() {
-        return new MainViewModel();
-    }
-
-    render() {
-        $(document).foundation();
-        // if (Config.lastFile) {
-        //     this.add('wallet-open', '#views');
-        // } else {
-            this.add('wallet-create', '#views');
-        // }
-    }
-
-    changeLogoRotationSpeed(seconds) {
-        var el = document.querySelector('.logo');
-        var angle = Animation.getRotationAngle(el);
-        Animation.reflow(el);
-        //apply last rotation and set the new animation values.
-        el.style.transform = 'rotate(' + angle + 'deg)';
-        el.style.animation = 'spin ' + seconds + 's linear infinite none';
-    }
-
 }

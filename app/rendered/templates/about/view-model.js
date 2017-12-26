@@ -1,8 +1,8 @@
-const ViewModel = require('../view-model.js');
+import ViewModel from '../view-model.js';
 
-module.exports = class AboutViewModel extends ViewModel {
+export default class AboutViewModel extends ViewModel {
     constructor() {
-        super(__filename);
+        super();
     }
 
     static init() {

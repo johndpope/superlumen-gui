@@ -8,8 +8,8 @@
         "pack": "electron-builder --dir",
         "dist": "electron-builder",
         "icons": "convert build/icons/icon-*.png build/icons/icon.ico && png2icns build/icons/icon.icns build/icons/icon-16x16.png build/icons/icon-32x32.png build/icons/icon-48x48.png build/icons/icon-128x128.png build/icons/icon-256x256.png build/icons/icon-512x512.png",
-        "sass": "node ./scripts/sass.js",
-        "sass-watch": "node ./scripts/sass.js -w",
+        "rollup": "node ./scripts/rollup.js",
+        "watch": "node ./scripts/rollup.js -w",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "postinstall": "electron-builder install-app-deps",
@@ -113,7 +113,9 @@
         "electron-builder": "^19.49.0"
     },
     "devDependencies": {
-        "node-sass": "^4.7.2",
-        "node-watch": "^0.5.5"
+        "node-watch": "^0.5.5",
+        "rollup": "^0.53.0",
+        "rollup-plugin-multi-entry": "^2.0.2",
+        "rollup-plugin-sass": "^0.5.3"
     }
 }

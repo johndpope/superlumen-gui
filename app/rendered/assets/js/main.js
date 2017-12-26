@@ -1,9 +1,32 @@
-import Randomization from '../util/randomization.js';
+/** SUPERLUMEN - Copyright 2017 Super-Lumen - www.superlumen.org */
+var bundle = (function (exports) {
+'use strict';
+
+class Randomization {
+
+    /**
+     * Returns a whole random number in-between or at "min" and "max" values.
+     * @param {Number} min
+     * @param {Number} max
+     * @returns {Number}
+     */
+    static number(min, max) {
+        let n = Math.round(Math.random() * (max + 1 - min) + min);
+        n = n > max ? max : n;
+        n = n < min ? min : n;
+        return n;
+    }
+
+    static newid() {
+        return Randomization.number(1000000, 9999999).toString() +
+            Math.round(new Date().getTime() * 10000 * Math.random()).toString();
+    }
+}
 
 /**
  * This is an abstract (non-initializable) class definition to be extended by an implementing view model class.
  */
-export default class ViewModel {
+class ViewModel {
 
     /**
      * Constructs a ViewModel object, should only be called by an extending class via 'super'.
@@ -81,7 +104,7 @@ export default class ViewModel {
             element.className = "active-" + mvvm;
             //autoload and setup the view-model
             let viewmodel = require(vmFilePath).init();
-            viewmodel.id = id
+            viewmodel.id = id;
             viewmodel.parent = this;
             viewmodel.element = div;
             //add the view-model to this view-model's children
@@ -158,3 +181,34 @@ export default class ViewModel {
     }
 
 }
+
+class AboutViewModel extends ViewModel {
+    constructor() {
+        super();
+    }
+
+    static init() {
+        return new AboutViewModel();
+    }
+
+    render() { }
+
+}
+
+// const path = require('path');
+// const fs = require('fs');
+
+//find the loading mvvm directory
+//let mvvmDir = path.dirname(window.location.href.substring('file://'.length + __dirname.length + 1));
+//look for a view-model.js file, if found, load and init it.
+// let vmFilePath = path.join(__dirname, mvvmDir, 'view-model.js');
+// if (fs.existsSync(vmFilePath)) {
+//     require(vmFilePath).init();
+// }
+
+AboutViewModel.init();
+
+return exports;
+
+}({}));
+//# sourceMappingURL=main.js.map
