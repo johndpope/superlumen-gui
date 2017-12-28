@@ -40,7 +40,6 @@ const viewModels = (function () {
     }
     return vms;
 })();
-console.info(viewModels);
 
 const inputOptions = {
     input: {
@@ -51,7 +50,8 @@ const inputOptions = {
             path.join(templatePath, '**', '*.scss')
         ],
         exclude: [
-            path.join(templatePath, '**', '*.old.js')
+            path.join(templatePath, '**', '*.old.js'),
+            path.join(templatePath, 'preload.js')
         ]
     },
     plugins: [
@@ -133,9 +133,8 @@ for (let x = 0; x < process.argv.length; x++) {
     if (process.argv[x].match(/-w|--watch/i)) {
         for (let i = 0; i < watchPaths.length; i++) {
             var wp = watchPaths[i];
-            let wpath = path.resolve(path.join(scriptPath, wp.path));
-            console.info(`Watching (Recursive=${!!wp.recursive}): ${wpath}`)
-            watch(wpath, {
+            console.info(`Watching (Recursive=${!!wp.recursive}): ${wp.path}`)
+            watch(wp.path, {
                 recursive: !!wp.recursive
             }, function (e, name) {
                 if (name.match(/(?:\.js|\.scss)$/i)) {

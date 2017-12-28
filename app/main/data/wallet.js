@@ -2,7 +2,6 @@ const fs = require('fs');
 const crypto = require('crypto');
 
 module.exports = class Wallet {
-
     constructor() {
         this.version = 0;
         this.salt = null;
@@ -63,3 +62,15 @@ module.exports = class Wallet {
     }
 
 }
+
+/**
+ * The minimum key file size allowed by Superlumen.
+ * @type {Number}
+ */
+module.exports.MinKeyFileSize = 32;
+
+/**
+ * The maximum key file size allowed by Superlumen.
+ * @type {Number}
+ */
+module.exports.MaxKeyFileSize = 1024 * 16;

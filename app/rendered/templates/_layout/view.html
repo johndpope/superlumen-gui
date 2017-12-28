@@ -5,16 +5,18 @@
     <meta charset="UTF-8">
     <title>{{ title if title else "Superlumen" }}</title>
     <link href="../../assets/css/main.css" rel="stylesheet" type="text/css" />
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
     <script src="../../assets/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../../assets/bower_components/foundation-sites/dist/js/foundation.min.js"></script>
     <script src="../../assets/js/main.js"></script>
-    <script>if (window.module) module = window.module;</script>
+    <script>if (window.module) module = window.module;</script> 
     {% block head %}{% endblock %}
 </head>
 
-<body id="{{ body.id if body.id else template.dirName | slug }}" class="{{ body.class }}"> 
-    {% block body %}{% endblock %}
+<body id="{{ body.id if body.id else template.dirName | slug }}" class="{{ body.class }}">
+    <section class="view">
+        {% block body %}{% endblock %}
+    </section>
 </body>
 
 </html>

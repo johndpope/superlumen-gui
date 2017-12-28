@@ -2,7 +2,7 @@
 /**
  * Animation is a utility class that provides methods for adjusting and working with DOM animations.
  */
-module.exports = class Animation {
+export default class Animation {
 
     /**
      * Clears the existing animation without causing a reset. The element's animation-fill-mode should be 'none'.
