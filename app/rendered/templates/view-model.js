@@ -42,6 +42,14 @@ export default class ViewModel {
     }
 
     /**
+     * Returns the view-model set on the HTML body, indicating the default view-model to initaialize.
+     */
+    static bodyViewModel() {
+        return document.getElementsByTagName('body')[0]
+            .getAttribute('data-view-model');
+    }
+
+    /**
      * Adds a viewmodel to this one and renders under the specified element.
      * @param {String} mvvm - The name of the mvvm to load.
      * @param {String|HTMLElement} element 

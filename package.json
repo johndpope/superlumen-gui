@@ -109,13 +109,16 @@
     },
     "dependencies": {
         "dotenv": "^4.0.0",
-        "electron": "^1.7.9",
-        "electron-builder": "^19.49.0"
+        "electron": "^1.8.1",
+        "electron-builder": "^19.49.3",
+        "electron-nunjucks": "^1.0.3"
     },
     "devDependencies": {
+        "glob": "^7.1.2",
         "node-watch": "^0.5.5",
         "rollup": "^0.53.0",
         "rollup-plugin-multi-entry": "^2.0.2",
+        "rollup-plugin-re": "^1.0.6",
         "rollup-plugin-sass": "^0.5.3"
     }
 }

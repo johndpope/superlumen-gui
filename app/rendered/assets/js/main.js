@@ -65,6 +65,14 @@ class ViewModel {
     }
 
     /**
+     * Returns the view-model set on the HTML body, indicating the default view-model to initaialize.
+     */
+    static bodyViewModel() {
+        return document.getElementsByTagName('body')[0]
+            .getAttribute('data-view-model');
+    }
+
+    /**
      * Adds a viewmodel to this one and renders under the specified element.
      * @param {String} mvvm - The name of the mvvm to load.
      * @param {String|HTMLElement} element 
@@ -195,18 +203,58 @@ class AboutViewModel extends ViewModel {
 
 }
 
-// const path = require('path');
-// const fs = require('fs');
 
-//find the loading mvvm directory
-//let mvvmDir = path.dirname(window.location.href.substring('file://'.length + __dirname.length + 1));
-//look for a view-model.js file, if found, load and init it.
-// let vmFilePath = path.join(__dirname, mvvmDir, 'view-model.js');
-// if (fs.existsSync(vmFilePath)) {
-//     require(vmFilePath).init();
-// }
+class TacowModel extends ViewModel {
+    constructor() {
+        super();
+    }
 
-AboutViewModel.init();
+    static init() {
+        return new AboutViewModel();
+    }
+
+    render() { }
+
+}
+
+class WalletCreateViewModel extends ViewModel {
+    constructor() {
+        super();
+    }
+
+    static init() {
+        return new WalletCreateViewModel();
+    }
+
+    render() { }
+
+}
+
+const ApplicationViewModels = {
+    /* The following tag is automatically replaced by rollup with key/values of each view-model 
+       detected in the "templates" directory. */
+    "./about/": AboutViewModel,
+    "./wallet-create/": WalletCreateViewModel
+};
+
+//Perform automatic load based on URL location.
+if (window.location) {
+    let href = window.location.href;
+    let tmpPath = 'templates/';
+    let tmpIndex = href.indexOf(tmpPath);
+    if (tmpIndex >= 0) {
+        href = './' + href.substring(tmpIndex + tmpPath.length);
+        //remove the last path segment
+        href = href.substring(0, href.lastIndexOf('/') + 1);
+        if (ApplicationViewModels[href] && ApplicationViewModels[href].init) {
+            ApplicationViewModels[href].init();
+        } else {
+            console.info('No view-model found for path "' + href + '".');
+        }
+    }
+}
+
+exports.TacowModel = TacowModel;
 
 return exports;
 

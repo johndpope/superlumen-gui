@@ -1,19 +1,45 @@
-var path = require('path');
-var url = require('url');
-var electron = require('electron');
-var Config = require('./data/config.js');
-var MainWindow = require('./windows/main-window.js');
+const path = require('path');
+const url = require('url');
+const electron = require('electron');
+const nunjucks = require('electron-nunjucks');
+const Config = require('./data/config.js');
+const MainWindow = require('./windows/main-window.js');
 
-var Superlumen = module.exports = {
+let Superlumen = module.exports = {
 
     app: null,
 
     window: null,
 
-    init: function() {
+    init: function () {
         Superlumen.app = electron.app;
+        //install nunjucks rendering
+        nunjucks.install(Superlumen.app, {
+            path: 'app/rendered/templates/',
+            filters: [
+                {
+                    name: 'slug', 
+                    func: function(str) {
+                        return str.toString().toLowerCase()
+                            .replace(/\s+/g, '-')
+                            .replace(/[^\w\-]+/g, '')
+                            .replace(/\-\-+/g, '-')
+                            .replace(/^-+/, '')
+                            .replace(/-+$/, '');
+                    }
+                },
+                {
+                    name: 'className',
+                    func: function(str) {
+                        return str.replace(/-/g, ' ').replace(/\b[a-z]/g, function (s) {
+                            return s[0].toUpperCase();
+                        }).replace(/ /g, '');
+                    }
+                }
+            ]
+        });
         //handle event when electron is "ready".
-        electron.app.on('ready', function() {
+        electron.app.on('ready', function () {
             Superlumen.window = new MainWindow();
             Superlumen.window.show();
         });

@@ -29,7 +29,11 @@ module.exports = class MainWindow extends Window {
         let menu = electron.Menu.buildFromTemplate(this.menuTemplate());
         electron.Menu.setApplicationMenu(menu);
         //load the main template
-        this.loadTemplate('main');
+        if (Config.lastFile) {
+            this.loadTemplate('wallet-open');
+        } else {
+            this.loadTemplate('wallet-create');
+        }
     }
 
     showAbout() {

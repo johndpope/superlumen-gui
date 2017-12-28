@@ -7590,7 +7590,6 @@ a.thumbnail {
   display: none; }
   .wizard .wizard-step.active {
     display: block; }
-
 body {
   text-align: center;
   padding: 2rem 4rem;
@@ -7635,13 +7634,19 @@ body#about {
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
-body#main {
+body#recovery-questions {
+  text-align: left; }
+  body#recovery-questions #qa-test {
+    display: none; }
+    body#recovery-questions #qa-test .div-list {
+      display: none; }
+body#startup {
   background-image: url("../../assets/images/quantum.jpg");
   padding: 0;
   margin: 0;
   opacity: 0;
   overflow: hidden; }
-  body#main.view-ready {
+  body#startup.view-ready {
     animation: fade-in 2s forwards; }
 
 @keyframes fade-in {
@@ -7649,7 +7654,7 @@ body#main {
     opacity: 0; }
   to {
     opacity: 1; } }
-  body#main .logo {
+  body#startup .logo {
     position: absolute;
     display: inline-block;
     top: -20px;
@@ -7665,28 +7670,47 @@ body#main {
 @keyframes spin {
   100% {
     transform: rotate(360deg); } }
-body#recovery-questions {
-  text-align: left; }
-  body#recovery-questions #qa-test {
-    display: none; }
-    body#recovery-questions #qa-test .div-list {
-      display: none; }
-.view-wallet-create {
+body#wallet-create {
+  background-image: url("../../assets/images/quantum.jpg");
+  margin: 0;
+  opacity: 0;
+  overflow: hidden;
   padding: 2rem 4rem 0 4rem;
   padding-left: 38%; }
-  .view-wallet-create .grid-container {
+  body#wallet-create.view-ready {
+    animation: fade-in 2s forwards; }
+
+@keyframes fade-in {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+  body#wallet-create .logo {
+    position: absolute;
+    display: inline-block;
+    top: -20px;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.25;
+    animation: spin 420s linear infinite none;
+    transition: 1s;
+    z-index: -999;
+    left: -760px;
+    opacity: 0.45; }
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg); } }
+  body#wallet-create .grid-container {
     position: relative;
     z-index: 0; }
-  .view-wallet-create .wizard .wizard-step-password .progress {
+  body#wallet-create .wizard .wizard-step-password .progress {
     display: none; }
-  .view-wallet-create .wizard .wizard-step-2-factor .span-2-factor-image {
+  body#wallet-create .wizard .wizard-step-2-factor .span-2-factor-image {
     display: block;
     height: 140px;
     margin-bottom: 2rem; }
-
-body#main .active-wallet-create .logo {
-  left: -760px;
-  opacity: 0.45; }
 .view-wallet-open {
   padding: 2rem 4rem 0 4rem; }
   .view-wallet-open .grid-container {

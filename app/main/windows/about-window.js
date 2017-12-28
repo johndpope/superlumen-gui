@@ -22,7 +22,7 @@ module.exports = class AboutWindow extends Window {
                 nodeIntegration: false
             }
         });
-        this.windowRef.setMenu(null); //no menu
+        //this.windowRef.setMenu(null); //no menu
         //load the about template
         this.loadTemplate('about');
     }

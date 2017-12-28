@@ -12,3 +12,17 @@ export default class AboutViewModel extends ViewModel {
     render() { }
 
 }
+
+
+export class TacowModel extends ViewModel {
+    constructor() {
+        super();
+    }
+
+    static init() {
+        return new AboutViewModel();
+    }
+
+    render() { }
+
+}

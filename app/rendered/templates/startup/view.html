@@ -1,0 +1,12 @@
+{% extends "../_layout/view.html" %}
+{% set body = { id: "startup" } %}
+
+{% block body %}
+<div id="views">
+    <!--Anything in the views container can be stylized by the active view. When a view is addded in, the views 
+        div will get an active view class name. -->
+    <img class="logo" src="../../assets/images/icons/icon-512x512.png" alt="Superlumen" />
+    {% include "./wallet-open/view.html" %}
+    {% include "./wallet-create/view.html" %}
+</div>
+{% endblock %}

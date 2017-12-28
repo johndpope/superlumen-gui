@@ -2,26 +2,87 @@ const fs = require('fs');
 const path = require('path');
 const watch = require('node-watch');
 const rollup = require('rollup');
+const glob = require('glob');
 const pluginMultiEntry = require('rollup-plugin-multi-entry');
 const pluginSass = require('rollup-plugin-sass');
+const pluginReplace = require('rollup-plugin-re');
 
+//dir path to this script
 const scriptPath = path.dirname(require.main.filename);
+
+//the templates dir path
+const templatePath = path.resolve(path.join(scriptPath, '..', 'app', 'rendered', 'templates'));
+
+//paths to watch for file changes.
+const watchPaths = [
+    { path: path.resolve(path.join(scriptPath, '../app/rendered/assets/scss')), recursive: true },
+    { path: path.resolve(path.join(scriptPath, '../app/rendered/data')), recursive: true },
+    { path: path.resolve(path.join(scriptPath, '../app/rendered/util')), recursive: true },
+    { path: path.resolve(path.join(scriptPath, '../app/rendered/templates')), recursive: true }
+];
+
+//build an array of view-model paths and the default ViewModel class names
+const viewModels = (function () {
+    let vms = [];
+    let files = glob.sync(path.join(templatePath, '**', 'view-model.js'));
+    for (let f of files) {
+        let vm = { path: '.' + f.substr(templatePath.length), className: null };
+        //read file and extract viewmodel class names
+        let js = fs.readFileSync(f).toString();
+        let regex = /^export default class (.+) extends.+ViewModel.+$/gm;
+        let match = regex.exec(js);
+        if (match) {
+            vm.className = match[1];
+        }
+        if (vm.className) {
+            vms.push(vm);
+        }
+    }
+    return vms;
+})();
+console.info(viewModels);
 
 const inputOptions = {
     input: {
         include: [
-            path.join(scriptPath, '..', 'app', 'rendered', 'templates', '**', '*.js'),
+            path.join(templatePath, '**', '*.js'),
             //SASS files
             path.join(scriptPath, '..', 'app', 'rendered', 'assets', 'scss', 'main.scss'),
-            path.join(scriptPath, '..', 'app', 'rendered', 'templates', '**', '*.scss')
+            path.join(templatePath, '**', '*.scss')
         ],
         exclude: [
-            path.join(scriptPath, '..', 'app', 'rendered', 'templates', '**', 'vm.js'),
-            path.join(scriptPath, '..', 'app', 'rendered', '**', '*.old.js')
+            path.join(templatePath, '**', '*.old.js')
         ]
     },
     plugins: [
         pluginMultiEntry(),
+        pluginReplace({
+            patterns: [
+                {
+                    match: /autoloader.js$/,
+                    test: /\/\*{VIEWMODEL-IMPORTS}\*\//g,
+                    replace: (function() {
+                        let entries = [];
+                        for (let vm of viewModels) {
+                            entries.push(`import ${vm.className} from '${vm.path}';`);
+                        }
+                        return entries.join('\n');
+                    })()
+                },
+                {
+                    match: /autoloader.js$/,
+                    test: /\/\*{VIEWMODEL-DICTIONARY-ENTRIES}\*\//g,
+                    replace: (function() {
+                        let entries = [];
+                        for (let vm of viewModels) {
+                            let dirPath = vm.path.substr(0, vm.path.length - path.basename(vm.path).length);
+                            entries.push(`"${dirPath}": ${vm.className}`);
+                        }
+                        return entries.join(',\n    ');
+                    })()
+                }
+            ]
+        }),
         pluginSass({
             options: {
                 //uncomment to include source maps.
@@ -30,7 +91,6 @@ const inputOptions = {
                 // sourceMap: true
             },
             output: function (styles, styleNodes) {
-                //console.log(styleNodes);
                 let cssOutputFile = path.join(scriptPath, '..', 'app', 'rendered', 'assets', 'css', 'main.css');
                 fs.writeFile(cssOutputFile, styles, function (err) {
                     if (err) {
@@ -67,14 +127,6 @@ async function build() {
 
 //always run once upon script execution
 build();
-
-//paths to watch for file changes.
-const watchPaths = [
-    { path: '../app/rendered/assets/scss', recursive: true },
-    { path: '../app/rendered/data', recursive: true },
-    { path: '../app/rendered/util', recursive: true },
-    { path: '../app/rendered/templates', recursive: true }
-];
 
 //check if the watch flag argument was provided
 for (let x = 0; x < process.argv.length; x++) {
