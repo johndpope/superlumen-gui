@@ -11,10 +11,12 @@ Showing the first steps of creating a new wallet...
 ![Preview](https://thumbs.gfycat.com/SecondaryThirdEland-size_restricted.gif)
 
 > #### Support the free and open development of Superlumen
-> We are not associated with IBM, the Stellar Org, or any other company. This project is maintained by ordinary people just like you.  
-> #### We accept Lumens (XLM) ! 
+> We are not associated with IBM, the Stellar Org, or any other company. This project is maintained by ordinary people just like you. You can show your support by contributing code, content, bug reports, or by donating some lumens.  
+> ❤ We really appreciate it!  
+> 
+> *Stellar Donation Address:*  
 > GBOBXLZCZWCP4A3FAWX7244JFFEDTVR75L4AK45Z5ZOCQV3NHNSYWQX2  
-> ❤ We really appreciate it!
+> 
 
 ---
 
