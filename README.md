@@ -1,17 +1,14 @@
 # SUPERLUMEN
 A powerful, open-source, free [Lumen](https://www.stellar.org/lumens/) wallet for [Stellar Core](https://www.stellar.org/) blockchain networks.
 
-### **!! This wallet is not yet functional. It is currently under active development. Beta ETA Jan 2018.**
+### !!This wallet is not yet functional.
+### Currently under active development. **Beta ETA Jan 2018.**
 
 Check out our [milestones](https://github.com/super-lumen/superlumen-gui/milestones) for a status of where we are.
 
-#### Open Wallet Preview:
-Our password, key-file, and yep, even 2-factor authentication protection for your wallet.  
-![Preview](https://thumbs.gfycat.com/OblongBelovedFinnishspitz-size_restricted.gif)
-
-#### New Wallet Preview:
-Creating a new wallet will be a breeze.  
-![Preview](https://thumbs.gfycat.com/ThreadbareDetailedBlowfish-size_restricted.gif)
+#### Preview
+Showing the first steps of creating a new wallet...  
+![Preview](https://thumbs.gfycat.com/SecondaryThirdEland-size_restricted.gif)
 
 > #### Support the free and open development of Superlumen
 > We accept, you guessed it, Lumens (XLM) ! 
