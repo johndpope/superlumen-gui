@@ -17,12 +17,12 @@ module.exports = class AboutWindow extends Window {
             resizable: false,
             fullscreenable: false,
             show: false,
-            backgroundColor: '#040404',
+            backgroundColor: '#E7E7E7',
             webPreferences: {
                 nodeIntegration: false
             }
         });
-        //this.windowRef.setMenu(null); //no menu
+        this.windowRef.setMenu(null); //no menu
         //load the about template
         this.loadTemplate('about');
     }

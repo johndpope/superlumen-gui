@@ -16,8 +16,8 @@ const templatePath = path.resolve(path.join(scriptPath, '..', 'app', 'rendered',
 //paths to watch for file changes.
 const watchPaths = [
     { path: path.resolve(path.join(scriptPath, '../app/rendered/assets/scss')), recursive: true },
-    { path: path.resolve(path.join(scriptPath, '../app/rendered/data')), recursive: true },
     { path: path.resolve(path.join(scriptPath, '../app/rendered/util')), recursive: true },
+    { path: path.resolve(path.join(scriptPath, '../app/rendered/components')), recursive: true },
     { path: path.resolve(path.join(scriptPath, '../app/rendered/templates')), recursive: true }
 ];
 

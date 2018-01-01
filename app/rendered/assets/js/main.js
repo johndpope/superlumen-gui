@@ -25,6 +25,7 @@ class Randomization {
 
 /**
  * This is an abstract (non-initializable) class definition to be extended by an implementing view model class.
+ * @class
  */
 class ViewModel {
 
@@ -237,12 +238,224 @@ class Comm {
             } else {
                 return window.ipc.sendSync(channel, arg);
             }
+        } else {
+            throw new Error('IPC not set - did the preload script run?');
+        }
+    }
+
+}
+
+/**
+ * Utility class that provides functions for validating and working with secure information.
+ */
+class Security {
+
+    /**
+     * @typedef {Object} StrengthRank
+     * @property {String} label - The label of the level of strength.
+     * @property {Number} rank - The relative strength of the password as a fraction (0-1) with 1 being the strongest.
+     */
+
+    /**
+     * Evaluates the given password for strength. Returns a strength label and fractional rank (0-1). 
+     * @param {String} password 
+     * @returns {StrengthRank}
+     */
+    static strength(password) {
+        let lcCount = password.replace(/[^a-z]/g, '').length;
+        let ucCount = password.replace(/[^A-Z]/g, '').length;
+        let numCount = password.replace(/[^0-9]/g, '').length;
+        let splCount = password.replace(/[a-zA-Z\d\s]/g, '').length;
+        if (!password) {
+            return { label: 'None', rank: 0 };
+        }
+        let strength =
+            (password.length > 14 ? 1 : password.length / 14) * (
+                (lcCount > 0 ? 0.15 : 0) +
+                (ucCount > 0 ? 0.25 : 0) +
+                (numCount > 0 ? 0.25 : 0) +
+                (splCount > 0 ? 0.35 : 0)
+            );
+        if (strength <= 0.4) {
+            return { label: (strength >= 0.2 ? 'Weak' : 'None'), rank: strength };
+        } else if (strength <= 0.6) {
+            return { label: 'Medium', rank: strength };
+        } else if (strength <= 0.8) {
+            return { label: 'Strong', rank: strength };
+        } else if (strength <= 0.95) {
+            return { label: 'Great', rank: strength };
+        } else {
+            return { label: 'Superlumenal', rank: strength };
         }
     }
 
 }
 
 class WalletCreateModel {
+    constructor() {
+
+        this.questions = [];
+
+        this.answers = [];
+        
+    }
+}
+
+const MinQuestions = 5;
+
+class RecoveryQuestionsViewModel extends ViewModel {
+    constructor() {
+        super();
+
+        this.model = new WalletCreateModel();
+    }
+
+    static init() {
+        return new RecoveryQuestionsViewModel();
+    }
+
+    render() {
+        //add a q/a
+        for (let x = 0; x < MinQuestions; x++) {
+            this.addQARow(false, false);
+        }
+        //focus first input
+        $('input:visible:first').focus().select();
+        //help
+        $('#link-help-guidelines').click(this, this.onHelpGuidelinesClick);
+        //handle questions
+        $('.button-add-qa').click(this, this.onAddQAClick);
+        //footer buttons
+        $('.button-cancel').click(this, this.onCancelClick);
+        $('.button-save').click(this, this.onSaveClick);
+    }
+
+    onHelpGuidelinesClick(e) {
+        $('#help-guidelines').fadeToggle();
+    }
+
+    onDeleteQAClick(e) {
+        let self = e.data;
+        $(this).closest('tr').remove();
+        let qaCount = $('table.list tbody tr').length;
+        $('.button-add-qa').prop('disabled', (qaCount > 20));
+        self.updateMetrics();
+    }
+
+    onAddQAClick(e) {
+        let self = e.data;
+        self.addQARow(true, true);
+    }
+
+    onQAKeypress(e) {
+        let self = e.data;
+        self.updateMetrics();
+    }
+
+    onCancelClick(e) {
+        window.close();
+    }
+
+    onRemoveClick(e) {
+        let self = e.data;
+        //clear q & a
+        self.model.questions = [];
+        self.model.answers = [];
+        //TODO
+        window.close();
+    }
+
+    onSaveClick(e) {
+        let self = e.data;
+        let str = self.updateMetrics();
+        self.updateModel();
+        if (self.model.answers.length < MinQuestions) {
+            alert(`At least ${MinQuestions} questions must be configured.`);
+            return;
+        } else if (str.rank <= 0.4) {
+            alert(`Your total answer strength is too weak. Recovery records must have at least medium strength protection.`);
+            return;
+        }
+        Comm.send('RecoveryQuestionsWindow.setModel', self.model, function (e, arg) {
+            console.log('resp: ' + arg);
+            window.close();
+        });        
+    }
+
+    /**
+     * Updates the user interface with the current strength and Q&A metrics.
+     * @returns {Security.StrengthRank}
+     */
+    updateMetrics() {
+        let count = 0;
+        let concatpw = '';
+        //get count
+        $('table.list tr').each(function () {
+            let q = $(this).find('.question').val();
+            let a = $(this).find('.answer').val();
+            if (q && a) {
+                count++;
+                concatpw += a;
+            }
+        });
+        //get strength
+        let str = Security.strength(concatpw);
+        //update UI
+        $('#span-answer-count').text(count);
+        $('#span-answer-strength').text(str.label);
+        $('.button-save').prop('disabled', (count < 5));
+        return str;
+    }
+
+    /**
+     * Updates the model object with values from the DOM.
+     */
+    updateModel() {
+        let self = this;
+        self.model.questions = [];
+        self.model.answers = [];
+        $('table.list tr').each(function () {
+            let q = $(this).find('.question').val();
+            let a = $(this).find('.answer').val();
+            if (q && a) {
+                self.model.questions.push(q);
+                self.model.answers.push(a);
+            }
+        });
+    }
+
+    /**
+     * Adds a new Q & A row to the table.
+     * @param {Boolean} focus - If true, the new question input will be focused.
+     * @param {Boolean} scroll - If true, the document will scroll to the newly inserted row
+     */
+    addQARow(focus, scroll) {
+        let qaCount = $('table.list tbody tr').length;
+        if (qaCount < 12) {
+            let html = `<tr>
+                <td><input type="text" class="question" placeholder="Enter: Question" maxlength="128" /></td>
+                <td><input type="text" class="answer" placeholder="Enter: Answer" maxlength="896" /></td>
+                <td class="text-right"><button class="button"><i class="fa fa-trash"></i></button></td>
+            </tr>`;
+            let tr = $(html);
+            tr.find('.question, .answer').keyup(this, this.onQAKeypress);
+            tr.find('button').click(this, this.onDeleteQAClick);
+            $('table.list tbody').append(tr);
+            if (scroll) {
+                console.log('shouldnt happen');
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+            if (focus) {
+                tr.find('input:first').focus();
+            }
+            qaCount++;
+        }
+        $('.button-add-qa').prop('disabled', (qaCount > 20));
+    }
+
+}
+
+class WalletCreateModel$1 {
     constructor() {
         this.password = null;
         this.keyFilePath = null;
@@ -254,11 +467,133 @@ class WalletCreateModel {
     }
 }
 
+/**
+ * This is an abstract (non-initializable) class definition to be extended by an implementing component class.
+ * @class
+ */
+class Component {
+
+    /**
+     * Constructs a ViewModel object, should only be called by an extending class via 'super'.
+     */
+    constructor() {
+        //validated
+        if (new.target === Component) {
+            throw new Error('Component is an abstract class and should not be initiated alone.');
+        } else if (typeof this.bind !== 'function') {
+            throw new Error('Function "bind" must be implemented on the extending class.');
+        }
+    }
+
+}
+
+/**
+ * Provides logic to transition from one wizard step (section) to another.
+ * @class
+ */
+class Wizard extends Component {
+    constructor(container) {
+        super();
+        if ($(container).length === 0) {
+            throw new Error('Invalid wizard container element.');
+        }
+
+        this.container = $(container);
+
+        //ensure a step is active.
+        if (!this.container.find('>.wizard-step.active').length) {
+            this.goTo(0);
+        }
+    }
+
+    bind() {
+        this.container.find('>.wizard-step .button-next').click(this, this.onNext);
+        this.container.find('>.wizard-step .button-back').click(this, this.onBack);
+        //handle "ENTER" clicks
+        this.container.find('>.wizard-step').find('input,select,textarea').keypress(this, this.onEnter);
+        $('body').keypress(this, this.onEnter);
+    }
+
+    onEnter(e) {
+        let self = e.data;
+        if (self.container.is(':visible') && (e.keyCode === 13 || e.which === 13)) {
+            if (document.activeElement.tagName.match(/input|select|textarea|body/i)) {
+                let nextButton = self.container.find('>.wizard-step.active').closest('.wizard-step').find('.button-next');
+                if (!nextButton.prop('disabled')) {
+                    nextButton.click();
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        }
+    }
+
+    onNext(e) {
+        let self = e.data;
+        if (!e.isDefaultPrevented()) {
+            self.next();
+        }
+    }
+
+    onBack(e) {
+        let self = e.data;
+        if (!e.isDefaultPrevented()) {
+            self.back();
+        }
+    }
+
+    next() {
+        let steps = this.container.find('>.wizard-step');
+        let activeIndex = steps.index(this.container.find('>.wizard-step.active'));
+        let maxIndex = this.container.find('>.wizard-step').length - 1;
+        if (activeIndex < maxIndex) {
+            this.goTo(++activeIndex);
+        }
+    }
+
+    back() {
+        let steps = this.container.find('>.wizard-step');
+        let activeIndex = steps.index(this.container.find('>.wizard-step.active'));
+        if (activeIndex > 0) {
+            this.goTo(--activeIndex);
+        }
+    }
+
+    goTo(step) {
+        let steps = this.container.find('>.wizard-step');
+        let activeIndex = steps.index(this.container.find('>.wizard-step.active'));
+        let targetIndex = -1;
+        let target = null;
+        if (typeof step === 'number') {
+            targetIndex = step;
+            target = $(steps[targetIndex]);
+        } else {
+            target = $(step);
+            targetIndex = steps.index(target);
+        }
+        if (targetIndex < 0) {
+            throw new Error(`Unable to find wizard step at index ${targetIndex}.`);
+        } else if (activeIndex !== targetIndex) {
+            this.container.find('>.wizard-step.active').removeClass('active');
+            target.addClass('active');
+            target.find('.wizard-default-focus').focus().select();
+        }
+    }
+
+    goToStart() {
+        this.goTo(0);
+    }
+
+    goToEnd() {
+        this.goTo(this.container.find('>.wizard-step').length - 1);
+    }
+}
+
 class WalletCreateViewModel extends ViewModel {
     constructor() {
         super();
 
-        this.model = new WalletCreateModel();
+        this.model = new WalletCreateModel$1();
     }
 
     static init() {
@@ -270,12 +605,19 @@ class WalletCreateViewModel extends ViewModel {
         //this.parent.changeLogoRotationSpeed(280);
         $('#link-open-wallet').click(this, this.onOpenWalletClick);
         //password section
-        $('input[name="text-password"]').change(this, this.onPasswordChange);
-        $('input[name="text-password"]').keyup(this, this.onPasswordChange);
-        $('input[name="text-password-confirm"]').change(this, this.onPasswordConfirmChange);
-        $('input[name="text-password-confirm"]').keyup(this, this.onPasswordConfirmChange);
-        $('.button-key-file').click(this, this.onKeyFileClick);
-        $('.button-key-file-generate').click(this, this.onKeyFileGenerateClick);
+        $('.wizard-step-password input[name="text-password"]').change(this, this.onPasswordChange);
+        $('.wizard-step-password input[name="text-password"]').keyup(this, this.onPasswordChange);
+        $('.wizard-step-password input[name="text-password-confirm"]').change(this, this.onPasswordConfirmChange);
+        $('.wizard-step-password input[name="text-password-confirm"]').keyup(this, this.onPasswordConfirmChange);
+        $('.wizard-step-password .button-key-file').click(this, this.onKeyFileClick);
+        $('.wizard-step-password .button-key-file-generate').click(this, this.onKeyFileGenerateClick);
+        $('.wizard-step-password .button-key-file-about').click(this, this.onKeyFileAboutClick);
+        $('.wizard-step-password .button-next').click(this, this.onPasswordNextClick);
+        //recovery
+        $('.wizard-step-recovery input[type="checkbox"]').change(this, this.onRecoveryChecked);
+        $('.wizard-step-recovery .button-setup-recovery').click(this, this.onConfigureRecovery);
+        //bind the wizard component
+        new Wizard($('.wizard')).bind();
     }
 
     onOpenWalletClick(e) {
@@ -296,11 +638,12 @@ class WalletCreateViewModel extends ViewModel {
         let numCount = pw.replace(/[^0-9]/g, '').length;
         let splCount = pw.replace(/[a-zA-Z\d\s]/g, '').length;
         let strength =
-            (lcCount > 0 ? 0.1 : 0) +
-            (ucCount > 0 ? 0.1 : 0) +
-            (numCount > 0 ? 0.1 : 0) +
-            (splCount > 0 ? 0.1 : 0) +
-            ((pw.length > 10 ? 1 : pw.length / 10) * 0.6);
+            (pw.length > 14 ? 1 : pw.length / 14) * (
+                (lcCount > 0 ? 0.15 : 0) +
+                (ucCount > 0 ? 0.25 : 0) +
+                (numCount > 0 ? 0.25 : 0) +
+                (splCount > 0 ? 0.35 : 0)
+            );
         if (pw) {
             $('.wizard-step-password .progress').show().removeClass('alert warning primary');
             let text = '';
@@ -313,31 +656,39 @@ class WalletCreateViewModel extends ViewModel {
             } else if (strength <= 0.8) {
                 $('.progress').addClass('warning');
                 text = 'strong';
-            } else {
+            } else if (strength <= 0.95) {
                 $('.progress').addClass('primary');
                 text = 'great';
+            } else {
+                $('.progress').addClass('primary');
+                text = 'superlumenal';
             }
-            $('.wizard-step-password .progress .progress-meter').css('width', (strength * 100) + '%');
+            $('.wizard-step-password .progress .progress-meter')
+                .data('strength', strength)
+                .css('width', (strength * 100) + '%');
             $('.wizard-step-password .progress .progress-meter-text').text(text);
         } else {
             $('.wizard-step-password .progress').hide();
+            $('.wizard-step-password .progress .progress-meter').data('strength', 0);
         }
         self.onPasswordConfirmChange(e);
     }
 
     onPasswordConfirmChange(e) {
-        let pw = $('input[name="text-password"]');
-        let cpw = $('input[name="text-password-confirm"]');
-        if (pw.val() != cpw.val()) {
-            $(cpw).siblings('.input-group-label')
-                .find('.fa')
-                .removeClass('fa-check')
-                .addClass('fa-warning');
-        } else {
+        let pw = $('.wizard-step-password input[name="text-password"]');
+        let cpw = $('.wizard-step-password input[name="text-password-confirm"]');
+        let confirmed = (pw.val() === cpw.val());
+        $('.wizard-step-password .button-next').prop('disabled', !(confirmed && pw.val()));
+        if (confirmed) {
             $(cpw).siblings('.input-group-label')
                 .find('.fa')
                 .removeClass('fa-warning')
                 .addClass('fa-check');
+        } else {
+            $(cpw).siblings('.input-group-label')
+                .find('.fa')
+                .removeClass('fa-check')
+                .addClass('fa-warning');
         }
     }
 
@@ -345,7 +696,7 @@ class WalletCreateViewModel extends ViewModel {
         let self = e.data;
         let parent = self.parent; //hold onto ref after this view's teardown
         let button = $('.button-key-file');
-        if (button.text() == 'Add Key-File') {
+        if (button.text() == 'Select Key-File') {
             Comm.send('openKeyFile', null, function (e, arg) {
                 if (arg && arg.valid) {
                     button
@@ -353,15 +704,15 @@ class WalletCreateViewModel extends ViewModel {
                         .text('Remove Key-File')
                         .removeClass('fa-key')
                         .addClass('fa-trash');
-                    $('.button-key-file-generate').prop('disabled', button.data('file-name'));
+                    $('.wizard-step-password .button-key-file-generate').prop('disabled', button.data('file-name'));
                 }
             });
         } else {
             button.data('file-name', '')
-                .text('Add Key-File')
+                .text('Select Key-File')
                 .removeClass('fa-trash')
                 .addClass('fa-key');
-            $('.button-key-file-generate').prop('disabled', button.data('file-name'));
+            $('.wizard-step-password .button-key-file-generate').prop('disabled', button.data('file-name'));
         }
         e.preventDefault();
         return false;
@@ -372,15 +723,48 @@ class WalletCreateViewModel extends ViewModel {
         let parent = self.parent; //hold onto ref after this view's teardown
         Comm.send('saveKeyFile', null, function (e, arg) {
             if (arg && arg.valid) {
-                $('.button-key-file')
+                $('.wizard-step-password .button-key-file')
                     .data('file-name', arg.keyFileName)
-                    .text('Clear Key-File')
+                    .text('Remove Key-File')
                     .removeClass('fa-key')
                     .addClass('fa-trash');
-                $('.button-key-file-generate').prop('disabled', true);
+                $('.wizard-step-password .button-key-file-generate').prop('disabled', true);
             }
         });
     }
+
+    onKeyFileAboutClick(e) {
+        alert(`A key-file is a small file containing random data. Key-files drastically increase the strength of the encryption used on your wallet, but you must always have access to the key-file when opening your wallet.\n\nLike passwords, you should keep the key-file secure and hidden away.`);
+    }
+
+    onPasswordNextClick(e) {
+        let strength = $('.wizard-step-password .progress .progress-meter').data('strength');
+        if (strength < 0.4) {
+            if (!confirm('Your password is weak, are you sure you want to continue?')) {
+                $('.wizard-step-password input[name="text-password"]').focus().select();
+                e.preventDefault();
+                return false;
+            }
+        }
+    }
+
+    onRecoveryChecked(e) {
+        let recoveryEnabled = $('.wizard-step-recovery input[type="checkbox"]').is(':checked');
+        let hasQA = true; //TODO
+        $('.wizard-step-recovery .button-next').prop('disabled', recoveryEnabled || (recoveryEnabled && !hasQA));
+        $('.wizard-step-recovery .button-setup-recovery').prop('disabled', !recoveryEnabled);
+    }
+
+    onConfigureRecovery(e) {
+        let self = e.data;
+        let parent = self.parent; //hold onto ref after this view's teardown
+        Comm.send('showRecoveryQuestions', null, function (e, arg) {
+            if (arg && arg.valid) {
+                $('.wizard-step-recovery .button-next').prop('disabled', true);
+            }
+        });
+    }
+
 
 }
 
@@ -388,6 +772,7 @@ const ApplicationViewModels = {
     /* The following tag is automatically replaced by rollup with key/values of each view-model 
        detected in the "templates" directory. */
     "./about/": AboutViewModel,
+    "./recovery-questions/": RecoveryQuestionsViewModel,
     "./wallet-create/": WalletCreateViewModel
 };
 

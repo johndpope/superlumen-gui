@@ -13,10 +13,10 @@ module.exports = class MainWindow extends Window {
     constructor() {
         super({
             width: 760,
-            height: 440,
+            height: 460,
             fullscreenable: false,
             show: false,
-            backgroundColor: '#040404',
+            backgroundColor: '#E7E7E7',
             webPreferences: {
                 nodeIntegration: false,
                 preload: path.join(__dirname, '..', '..', 'rendered', 'templates', 'preload.js')
@@ -61,7 +61,9 @@ module.exports = class MainWindow extends Window {
                 fileName = fileNames[0];
                 Config.lastFile = fileName;
             }
-            e.sender.send('openWallet', fileName);
+            if (e && e.sender) {
+                e.sender.send('openWallet', fileName);
+            }
         });
     }
 
@@ -73,7 +75,9 @@ module.exports = class MainWindow extends Window {
             ]
         }, function (fileNames) {
             if (!fileNames) {
-                e.sender.send('openKeyFile', null);
+                if (e && e.sender) {
+                    e.sender.send('openKeyFile', null);
+                }
                 return;
             };
             let fileName = fileNames[0];
@@ -81,21 +85,27 @@ module.exports = class MainWindow extends Window {
             let stats = fs.statSync(fileName)
             if (stats.size > Wallet.MaxKeyFileSize) {
                 electron.dialog.showErrorBox('Invalid Size', `The file selected is too large (${Math.round(stats.size / 1024)}KB). The maximum is ${Wallet.MaxKeyFileSize / 1024}KB.`);
-                e.sender.send('openKeyFile', {
-                    valid: false,
-                    keyFileName: fileName
-                });
+                if (e && e.sender) {
+                    e.sender.send('openKeyFile', {
+                        valid: false,
+                        keyFileName: fileName
+                    });
+                }
             } else if (stats.size < Wallet.MinKeyFileSize) {
                 electron.dialog.showErrorBox('Invalid Size', `The file selected is too small (${Math.round(stats.size)} Bytes). The minimum is ${Wallet.MinKeyFileSize} Bytes.`);
-                e.sender.send('openKeyFile', {
-                    valid: false,
-                    keyFileName: fileName
-                });
+                if (e && e.sender) {
+                    e.sender.send('openKeyFile', {
+                        valid: false,
+                        keyFileName: fileName
+                    });
+                }
             } else {
-                e.sender.send('openKeyFile', {
-                    valid: true,
-                    keyFileName: fileName
-                });
+                if (e && e.sender) {
+                    e.sender.send('openKeyFile', {
+                        valid: true,
+                        keyFileName: fileName
+                    });
+                }
             }
         });
     }
@@ -109,34 +119,42 @@ module.exports = class MainWindow extends Window {
             ]
         }, function (fileName) {
             if (!fileName) {
-                e.sender.send('saveKeyFile', null);
+                if (e && e.sender) {
+                    e.sender.send('saveKeyFile', null);
+                }
                 return;
             };
             let buf = crypto.randomBytes(1024 * 4);
             fs.writeFile(fileName, buf, function (err) {
                 if (err) {
                     electron.dialog.showErrorBox('Error Writing Key File', 'There was an error writing the key file:\n' + err);
-                    e.sender.send('saveKeyFile', {
-                        valid: false,
-                        keyFileName: fileName
-                    });
+                    if (e && e.sender) {
+                        e.sender.send('saveKeyFile', {
+                            valid: false,
+                            keyFileName: fileName
+                        });
+                    }
                 } else {
-                    e.sender.send('saveKeyFile', {
-                        valid: true,
-                        keyFileName: fileName
-                    });
+                    if (e && e.sender) {
+                        e.sender.send('saveKeyFile', {
+                            valid: true,
+                            keyFileName: fileName
+                        });
+                    }
                 }
             });
         });
     }
 
-    showAbout() {
-        var popup = new AboutWindow(this);
+    showAbout(e, arg) {
+        let self = e && e.sender && e.sender.browserWindowOptions ? e.sender.browserWindowOptions.window : this;
+        var popup = new AboutWindow(self);
         popup.show();
     }
 
-    showRecoveryQuestions() {
-        let win = new RecoveryQuestionsWindow(this);
+    showRecoveryQuestions(e, arg) {
+        let self = e && e.sender && e.sender.browserWindowOptions ? e.sender.browserWindowOptions.window : this;
+        let win = new RecoveryQuestionsWindow(self);
         win.show();
     }
 
@@ -146,6 +164,27 @@ module.exports = class MainWindow extends Window {
             {
                 label: 'File',
                 submenu: [
+                    {
+                        label: 'New Wallet',
+                        accelerator: 'CommandOrControl+N',
+                        click: function () {
+
+                        }
+                    },
+                    {
+                        label: 'Open Wallet',
+                        accelerator: 'CommandOrControl+O',
+                        click: function () {
+
+                        }
+                    },
+                    {
+                        label: 'Recovery...',
+                        click: function () {
+
+                        }
+                    },
+                    { type: 'separator' },
                     { role: 'quit' }
                 ]
             },

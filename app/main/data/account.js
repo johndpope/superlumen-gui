@@ -1,4 +1,3 @@
-const SecureString = require('secure-string');
 
 module.exports = class Account {
 

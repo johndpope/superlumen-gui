@@ -11,6 +11,7 @@ module.exports = class Window {
         if (!config) {
             throw new Error('Argument "config" must be provided.');
         }
+        config.window = this;
 
         /**
          * The Electron BrowserWindow object instance.

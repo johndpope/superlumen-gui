@@ -2,6 +2,7 @@ import Randomization from '../util/randomization.js';
 
 /**
  * This is an abstract (non-initializable) class definition to be extended by an implementing view model class.
+ * @class
  */
 export default class ViewModel {
 

@@ -5,3 +5,32 @@
         font-size: 70%;
     }
 }
+
+.button {
+    min-width: 40px;
+}
+
+input,
+textarea,
+select {
+    &:focus {
+        color: white;
+
+        &::placeholder,
+        &[placeholder] {
+            color: white;
+        }
+    }
+}
+
+blockquote {
+    background: rgba(#FFFFFF, 0.3);
+    padding-top: 1rem;
+    padding-bottom: 0.4rem;
+}
+
+.text-small {
+    line-height: 1rem;
+    font-size: smaller;
+    color: $dark-gray;
+}

@@ -1,5 +1,4 @@
 body {
-    text-align: center;
     padding: 2rem 4rem;
     background: transparent url(../images/generic.jpg) center center no-repeat fixed;
     -webkit-background-size: cover;
@@ -14,7 +13,7 @@ body {
         &.focus,
         &:active.focus,
         &.active.focus {
-            outline-color: #f4de01 !important;
+            outline-color: #258ec6 !important;
         }
     }
 }
@@ -22,12 +21,18 @@ body {
 body::-webkit-scrollbar {
     width: 1em;
 }
- 
+
 body::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
- 
+
 body::-webkit-scrollbar-thumb {
-  background-color: #262626;
-  outline: 1px solid #444444;
+    background-color: #262626;
+    outline: 1px solid #444444;
+}
+
+ol, ul {
+    li {
+        margin-bottom: 1rem;
+    }
 }

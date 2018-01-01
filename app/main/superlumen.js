@@ -16,6 +16,7 @@ let Superlumen = module.exports = {
         //install nunjucks rendering
         nunjucks.install(Superlumen.app, {
             path: 'app/rendered/templates/',
+            noCache: true,
             filters: [
                 {
                     name: 'slug', 

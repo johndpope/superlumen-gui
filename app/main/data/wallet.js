@@ -10,14 +10,20 @@ module.exports = class Wallet {
         this.keyFilePath = null;
         this.accounts = [];
         this.recovery = null;
+
+        /**
+         * Indicates whether the wallet has been unlocked or not.
+         * @type {Boolean}
+         */
+        this.unlocked = false;
     }
 
     setPassword(passwordPlainText) {
         if (!this.salt) {
-            this.salt = crypto.randomBytes(Math.random() * (128 - 64) + 64).toString('base64');
+            this.salt = crypto.randomBytes(Math.round(Math.random() * (128 - 64) + 64)).toString('base64');
         }
         let shasum = crypto.createHash('sha512');
-        shasum.update(Buffer.concat([new Buffer(passwordPlainText, 'utf8'), this.salt]));
+        shasum.update(Buffer.concat([new Buffer(passwordPlainText, 'utf8'),  new Buffer(this.salt, 'base64')]));
         this.password = shasum.digest('hex');
     }
 

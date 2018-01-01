@@ -1,5 +1,4 @@
 body#wallet-create {
-    background-image: url("../../assets/images/quantum.jpg");
     margin: 0;
     opacity: 0;
     overflow: hidden;
@@ -22,12 +21,10 @@ body#wallet-create {
         right: 0;
         margin-left: auto;
         margin-right: auto;
-        opacity: 0.25;
         animation: spin 420s linear infinite none;
         transition: 1s;
         z-index: -999;
-        left: -760px;
-        opacity: 0.45;
+        left: -780px;
     }
 
     @keyframes spin {

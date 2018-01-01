@@ -19,6 +19,8 @@ export default class Comm {
             } else {
                 return window.ipc.sendSync(channel, arg);
             }
+        } else {
+            throw new Error('IPC not set - did the preload script run?');
         }
     }
 

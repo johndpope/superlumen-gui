@@ -1,25 +1,50 @@
-{% extends "../_layout/view.html" %}
-
-{% block body %}
+{% extends "../_layout/view.html" %} {% block body %}
 <img class="logo" src="../../assets/images/icons/icon-512x512.png" alt="Superlumen" />
-<div class="grid-container">
-    <div class="grid-x grid-margin-x">
-        <div class="medium-12 cell">
-            <h1>New Wallet</h1>
-            <p>
-                Create a new wallet by filling out the form below.
-                <br /> You can also
-                <a id="link-open-wallet">open an existing wallet</a>.
-            </p>
-        </div>
-    </div>
-</div>
 <div class="grid-container wizard">
-    <section class="wizard-step active wizard-step-password">
+    <section class="wizard-step active wizard-step-setup">
         <div class="grid-x grid-margin-x">
             <div class="medium-12 cell">
+                <h1>New Wallet</h1>
+                <p>
+                    In order to use Superlumen, you need to create a wallet.
+                    <br /> You can also
+                    <a id="link-open-wallet">
+                        <i class="fa fa-folder-open-o"></i> open an existing wallet</a>.
+                </p>
+                <p>
+                    Superlumen wallets can hold multiple Stellar accounts, and provide a wealth of features to help utilize the blockchain. This
+                    software has the tooling to establish a secure wallet file, but it is up to
+                    <em>you</em> to keep it safe.
+                </p>
+                <p>
+                    Superlumen is free and
+                    <a href="https://github.com/super-lumen/superlumen-gui" target="_blank">
+                        <i class="fa fa-github"></i> open-source</a>.
+                    <br /> Please consider supporting the project if you
+                    <i class="fa fa-heart"></i> our work.
+                </p>
+                <p class="text-small">
+                    This software is licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/" target="_blank">Mozilla Public License Version 2.0</a>, if you do not agree with this license, you may not
+                    use this software.
+                </p>
+            </div>
+            <div class="medium-12 cell text-right">
+                <button class="button button-next ffab fa-chevron-right">Get Started</button>
+            </div>
+        </div>
+    </section>
+    <section class="wizard-step wizard-step-password">
+        <div class="grid-x grid-margin-x">
+            <div class="medium-12 cell">
+                <h1>Create Password</h1>
+                <p>
+                    You need to secure your wallet with a password. For the best security, use a password that includes lower and upper-case
+                    letters, numbers, and special characters, and is at least 12 characters in length.
+                </p>
+            </div>
+            <div class="medium-12 cell">
                 <div class="input-wrapper">
-                    <input name="text-password" type="password" placeholder="Enter: Wallet Password" required>
+                    <input name="text-password" type="password" class="wizard-default-focus" placeholder="Enter: Wallet Password" required>
                     <small class="error"></small>
                 </div>
             </div>
@@ -39,53 +64,65 @@
                 </div>
             </div>
             <div class="medium-12 cell text-right">
-                <button class="button secondary button-key-file ffab fa-key">Add Key-File</button>
-                <button class="button secondary button-key-file-generate" title="Generate &amp; add a key file.">
+                <button class="button secondary button-key-file ffab fa-key" title="Select an existing file as your wallet key file.">Select Key-File</button>
+                <button class="button secondary button-key-file-generate" title="Generate a new key file.">
                     <i class="fa fa-plus"></i>
                 </button>
+                <button class="button secondary button-key-file-about" title="What is a key file?">
+                    <i class="fa fa-question"></i>
+                </button>
             </div>
-            <div class="medium-12 cell text-right">
-                <button class="button button-go-recovery ffab fa-chevron-right">Next: Recovery</button>
+            <div class="medium-6 cell text-left">
+                <button class="button secondary button-back ffab before fa-chevron-left">Back</button>
+            </div>
+            <div class="medium-6 cell text-right">
+                <button class="button button-next ffab fa-chevron-right" disabled>Next: Recovery</button>
             </div>
         </div>
     </section>
     <section class="wizard-step wizard-step-recovery">
         <div class="grid-x grid-margin-x">
-            <div class="medium-7 cell">
-                Add Recovery ?
+            <div class="medium-12 cell">
+                <h1>Recovery Record</h1>
+                <p>
+                    You can optionally add a recovery record to your wallet. This allows you to recover your Stellar account public and private
+                    keys if you forget your password or lose your key-file.
+                </p>
+                <p>
+                    This creates a separate attack vector to your account information and therefore needs to be setup with care. You will need
+                    <em>at least</em> 5 questions and answers that meet some minimum complexity requirements.
+                </p>
             </div>
             <div class="medium-5 cell">
+                Add Recovery Record?
+            </div>
+            <div class="medium-3 cell">
                 <div class="switch">
-                    <input class="switch-input" id="yes-no" type="checkbox" name="checkbox-recovery" checked>
+                    <input class="switch-input wizard-default-focus" id="yes-no" type="checkbox" name="checkbox-recovery" checked>
                     <label class="switch-paddle" for="yes-no">
                         <span class="switch-active" aria-hidden="true">Yes</span>
                         <span class="switch-inactive" aria-hidden="true">No</span>
                     </label>
                 </div>
             </div>
-            <div class="medium-12 cell">
-                If you lose your password and/or key file, you may still need to access your account(s). You can setup questions and answers
-                that will encrypt your critical Stellar account data for recovery. 
-                <hr />
-            </div>
-            <div class="medium-12 cell">
-                <button class="button secondary button-setup-recovery ffab fa-gear">Setup Recovery Q&amp;A</button>
+            <div class="medium-4 cell text-right">
+                <button class="button secondary button-setup-recovery ffab fa-gear">Configure</button>
             </div>
             <div class="medium-6 cell text-left">
-                <button class="button button-go-password ffab before fa-chevron-left">Back</button>
+                <button class="button secondary button-back ffab before fa-chevron-left">Back</button>
             </div>
             <div class="medium-6 cell text-right">
-                <button class="button button-go-accounts ffab fa-chevron-right" disabled>Next: Add Accounts</button>
+                <button class="button button-next ffab fa-chevron-right" disabled>Next: Add Accounts</button>
             </div>
         </div>
     </section>
     <section class="wizard-step wizard-step-accounts">
         <div class="grid-x grid-margin-x">
             <div class="medium-12 cell">
-                
+
             </div>
             <div class="medium-6 cell text-left">
-                <button class="button button-go-recovery ffab before fa-chevron-left">Back</button>
+                <button class="button secondary button-back ffab before fa-chevron-left">Back</button>
             </div>
             <div class="medium-6 cell text-right">
                 <button class="button button-complete ffab fa-chevron-right">Done: Save &amp; Open</button>
