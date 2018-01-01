@@ -1,5 +1,23 @@
 # SUPERLUMEN
-A powerful, open-source, free [Lumen](https://www.stellar.org/lumens/) wallet for [Stellar Core](https://www.stellar.org/) blockchain networks.
+A powerful, open-source, free [Lumen](https://www.stellar.org/lumens/) wallet, blockchain explorer, and exchange interface for [Stellar Core](https://www.stellar.org/) blockchain networks. Superlumen is more than just a basic wallet. Our goal is to provide a tool and interface that leverages the Stellar network features to their fullest. Here's just a few features to look forward to:
+
+- Secure Wallet.
+  - Optional recovery record forwhen you've lost your key-file or forgotten your password.
+  - Multi-account support.
+  - Keep memo records.
+  - Set inflation pool.
+- Send/Recieve
+  - Send Lumens (XLM) or any Stellar asset.
+  - Leverage Path Payments to pay with one asset, converted to another through the network as a series of offers.
+  - Receive by crafting a secure message.
+- Stellar Distributed Exchange
+  - Watch &amp; subscribe to orderbooks between assets.
+  - Create your own buy/sell orders.
+- Transaction Explorer
+  - Browse and view the details of any tx on the blockchain.
+  - Easily review the transactions on your accounts.
+- Asset Manager
+  - Review and manage the assets owned by your accounts.
 
 ### !!This wallet is not yet functional.
 ### Currently under active development. **Beta ETA Jan 2018.**
