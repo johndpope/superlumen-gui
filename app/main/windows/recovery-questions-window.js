@@ -2,7 +2,7 @@ const path = require('path');
 const url = require('url');
 const electron = require('electron');
 const Config = require('../data/config.js');
-const RecoveryModel = require('../data/recovery.js');
+const RecoveryRecord = require('../data/recovery-record.js');
 const Window = require('./window.js');
 
 module.exports = class RecoveryQuestionsWindow extends Window {
@@ -25,8 +25,6 @@ module.exports = class RecoveryQuestionsWindow extends Window {
             }
         });
 
-        this.model = new RecoveryModel();
-
         //set app menus
         //this.windowRef.setMenu(null); //no menu
         //setup ipc communication
@@ -36,27 +34,34 @@ module.exports = class RecoveryQuestionsWindow extends Window {
     }
 
     setModel(e, arg) {
-        console.log('hit');
         let self = e && e.sender && e.sender.browserWindowOptions ? e.sender.browserWindowOptions.window : this;
-        if (!arg || !arg.questions || !arg.answers) {
-            e.sender.send('setModel', false);
+        if (!arg || !arg.questions || !arg.answers || !self.parent.wallet) {
+            e.sender.send('RecoveryQuestionsWindow.setModel', false);
+            return false;
+        } 
+        if (!self.parent.wallet.recovery) {
+            self.parent.wallet.recovery = new RecoveryRecord();
+        }
+        let rr = self.parent.wallet.recovery;
+        if (!rr.unlocked) {
+            e.sender.send('RecoveryQuestionsWindow.setModel', false);
             return false;
         }
-        self.model.questions = arg.questions || [];
-        self.model.answers = arg.answers || [];
-        self.model.updatePassword();
+        rr.questions = arg.questions || [];
+        rr.answers = arg.answers || [];
         if (e && e.sender) {
-            e.sender.send('setModel', true);
+            e.sender.send('RecoveryQuestionsWindow.setModel', true);
         }
         return true;
     }
 
     readModel(e, arg) {
         let self = e && e.sender && e.sender.browserWindowOptions ? e.sender.browserWindowOptions.window : this;
+        let rr = self.parent.wallet.recovery;
         if (e && e.sender) {
-            e.sender.send('readModel', self.model);
+            e.sender.send('RecoveryQuestionsWindow.readModel', rr);
         }
-        return self.model;
+        return rr;
     }
 
 }

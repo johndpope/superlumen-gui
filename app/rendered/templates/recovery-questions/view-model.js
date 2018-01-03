@@ -79,9 +79,12 @@ export default class RecoveryQuestionsViewModel extends ViewModel {
             return;
         }
         Comm.send('RecoveryQuestionsWindow.setModel', self.model, function (e, arg) {
-            console.log('resp: ' + arg);
-            window.close();
-        });        
+            if (arg) {
+                window.close();
+            } else {
+                alert('Unable to save recovery record settings due to the wallet being locked or unavailable.');
+            }
+        });
     }
 
     /**

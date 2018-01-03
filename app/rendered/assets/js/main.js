@@ -276,11 +276,13 @@ class Security {
                 (numCount > 0 ? 0.25 : 0) +
                 (splCount > 0 ? 0.35 : 0)
             );
-        if (strength <= 0.4) {
-            return { label: (strength >= 0.2 ? 'Weak' : 'None'), rank: strength };
-        } else if (strength <= 0.6) {
+        if (strength <= 0.2) {
+            return { label: 'None', rank: strength };
+        } else if (strength <= 0.5) {
+            return { label: 'Weak', rank: strength };
+        } else if (strength <= 0.7) {
             return { label: 'Medium', rank: strength };
-        } else if (strength <= 0.8) {
+        } else if (strength <= 0.85) {
             return { label: 'Strong', rank: strength };
         } else if (strength <= 0.95) {
             return { label: 'Great', rank: strength };
@@ -377,9 +379,12 @@ class RecoveryQuestionsViewModel extends ViewModel {
             return;
         }
         Comm.send('RecoveryQuestionsWindow.setModel', self.model, function (e, arg) {
-            console.log('resp: ' + arg);
-            window.close();
-        });        
+            if (arg) {
+                window.close();
+            } else {
+                alert('Unable to save recovery record settings due to the wallet being locked or unavailable.');
+            }
+        });
     }
 
     /**

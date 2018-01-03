@@ -26,7 +26,7 @@ module.exports = class MainWindow extends Window {
         /**
          * @type {Wallet}
          */
-        this.wallet = null;
+        this.wallet = new Wallet();
 
         let self = this;
         //set app menus

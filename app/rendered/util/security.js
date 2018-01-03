@@ -31,11 +31,13 @@ export default class Security {
                 (splCount > 0 ? 0.35 : 0)
             );
         let text = '';
-        if (strength <= 0.4) {
-            return { label: (strength >= 0.2 ? 'Weak' : 'None'), rank: strength };
-        } else if (strength <= 0.6) {
+        if (strength <= 0.2) {
+            return { label: 'None', rank: strength };
+        } else if (strength <= 0.5) {
+            return { label: 'Weak', rank: strength };
+        } else if (strength <= 0.7) {
             return { label: 'Medium', rank: strength };
-        } else if (strength <= 0.8) {
+        } else if (strength <= 0.85) {
             return { label: 'Strong', rank: strength };
         } else if (strength <= 0.95) {
             return { label: 'Great', rank: strength };

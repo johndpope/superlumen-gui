@@ -3,28 +3,30 @@ const crypto = require('crypto');
 
 module.exports = class Wallet {
     constructor() {
-        this.version = 0;
-        this.salt = null;
-        this.walletFilePath = null;
-        this.password = null;
-        this.keyFilePath = null;
+
+        /**
+         * Holds the Account objects. When locked, the entire array is encrypted using the wallet  password and 
+         * key-file as a string. When unlocked, this field is an array of Accounts.
+         * @type {String|Array.<Account>}
+         */
         this.accounts = [];
+
+        /**
+         * If a recovery record is present, it is stored in this field.
+         * @type {Recovery}
+         */
         this.recovery = null;
+
+        /**
+         * Holds the path of the wallet file when loaded and after saving.
+         */
+        this.walletFilePath = null;
 
         /**
          * Indicates whether the wallet has been unlocked or not.
          * @type {Boolean}
          */
-        this.unlocked = false;
-    }
-
-    setPassword(passwordPlainText) {
-        if (!this.salt) {
-            this.salt = crypto.randomBytes(Math.round(Math.random() * (128 - 64) + 64)).toString('base64');
-        }
-        let shasum = crypto.createHash('sha512');
-        shasum.update(Buffer.concat([new Buffer(passwordPlainText, 'utf8'),  new Buffer(this.salt, 'base64')]));
-        this.password = shasum.digest('hex');
+        this.unlocked = true;
     }
 
     /**
@@ -45,9 +47,7 @@ module.exports = class Wallet {
             throw new Error('The key file path specified does not exist or is inaccessible.');
         }
         this.walletFilePath = walletFilePath;
-        this.password = password;
-        this.keyFilePath = keyFilePath;
-        this.accounts = [];
+        //TODO load
     }
 
     /**

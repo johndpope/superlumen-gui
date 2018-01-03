@@ -20,6 +20,12 @@ module.exports = class Window {
         this.windowRef = new electron.BrowserWindow(config);
 
         /**
+         * The parent window.
+         * @type {Window}
+         */
+        this.parent = config.parent ? config.parent.webContents.browserWindowOptions.window : null;
+
+        /**
          * The currently loaded template information. This will be populated when a template is loaded via the 
          * "loadTemplate" method.
          */

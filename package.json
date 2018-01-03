@@ -10,7 +10,7 @@
         "icons": "convert build/icons/icon-*.png build/icons/icon.ico && png2icns build/icons/icon.icns build/icons/icon-16x16.png build/icons/icon-32x32.png build/icons/icon-48x48.png build/icons/icon-128x128.png build/icons/icon-256x256.png build/icons/icon-512x512.png",
         "rollup": "node ./scripts/rollup.js",
         "watch": "node ./scripts/rollup.js -w",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "./node_modules/mocha/bin/mocha tests/**/*.test.js"
     },
     "postinstall": "electron-builder install-app-deps",
     "keywords": [
@@ -115,6 +115,7 @@
     },
     "devDependencies": {
         "glob": "^7.1.2",
+        "mocha": "^4.1.0",
         "node-watch": "^0.5.5",
         "rollup": "^0.53.0",
         "rollup-plugin-multi-entry": "^2.0.2",
