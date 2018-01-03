@@ -111,7 +111,9 @@
         "dotenv": "^4.0.0",
         "electron": "^1.8.1",
         "electron-builder": "^19.49.3",
-        "electron-nunjucks": "^1.0.3"
+        "electron-nunjucks": "^1.0.3",
+        "stellar-base": "^0.7.6",
+        "stellar-sdk": "^0.8.0"
     },
     "devDependencies": {
         "glob": "^7.1.2",

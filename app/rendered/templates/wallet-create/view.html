@@ -1,4 +1,5 @@
-{% extends "../_layout/view.html" %} {% block body %}
+{% extends "../_layout/view.html" %} 
+{% block body %}
 <img class="logo" src="../../assets/images/icons/icon-512x512.png" alt="Superlumen" />
 <div class="grid-container wizard">
     <section class="wizard-step active wizard-step-setup">
@@ -21,11 +22,13 @@
                     <a href="https://github.com/super-lumen/superlumen-gui" target="_blank">
                         <i class="fa fa-github"></i> open-source</a>.
                     <br /> Please consider supporting the project if you
-                    <i class="fa fa-heart"></i> our work.
+                    <i class="fa fa-heart-o"></i> our work.
                 </p>
                 <p class="text-small">
-                    This software is licensed under the <a href="https://www.mozilla.org/en-US/MPL/2.0/" target="_blank">Mozilla Public License Version 2.0</a>, if you do not agree with this license, you may not
-                    use this software.
+                    This software is licensed under the
+                    <a href="https://www.mozilla.org/en-US/MPL/2.0/" target="_blank">Mozilla Public License Version 2.0</a>.
+                    <br />
+                    <br />
                 </p>
             </div>
             <div class="medium-12 cell text-right">
@@ -93,19 +96,17 @@
                     <em>at least</em> 5 questions and answers that meet some minimum complexity requirements.
                 </p>
             </div>
-            <div class="medium-5 cell">
-                Add Recovery Record?
-            </div>
-            <div class="medium-3 cell">
+            <div class="medium-7 cell">
+                <span class="span-switch-label">Add Recovery Record?</span>
                 <div class="switch">
-                    <input class="switch-input wizard-default-focus" id="yes-no" type="checkbox" name="checkbox-recovery" checked>
-                    <label class="switch-paddle" for="yes-no">
+                    <input class="switch-input wizard-default-focus" id="checkbox-recovery" type="checkbox" checked>
+                    <label class="switch-paddle" for="checkbox-recovery">
                         <span class="switch-active" aria-hidden="true">Yes</span>
                         <span class="switch-inactive" aria-hidden="true">No</span>
                     </label>
                 </div>
             </div>
-            <div class="medium-4 cell text-right">
+            <div class="medium-5 cell text-right">
                 <button class="button secondary button-setup-recovery ffab fa-gear">Configure</button>
             </div>
             <div class="medium-6 cell text-left">
@@ -119,7 +120,30 @@
     <section class="wizard-step wizard-step-accounts">
         <div class="grid-x grid-margin-x">
             <div class="medium-12 cell">
-
+                <h1>Account</h1>
+                <p>
+                    Superlumen needs at least one account to run. You can choose to create a new account or add an existing one using its public
+                    and private keys. You can add additional accounts after setup.
+                </p>
+            </div>
+            <div class="medium-12 cell">
+                <span class="span-switch-label">Create new account?</span>
+                <div class="switch">
+                    <input class="switch-input wizard-default-focus" id="checkbox-new-account" type="checkbox" checked>
+                    <label class="switch-paddle" for="checkbox-new-account">
+                        <span class="switch-active" aria-hidden="true">Yes</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                    </label>
+                </div>
+            </div>
+            <div class="medium-10 cell">
+                Account ID:
+                <span class="span-account-id"></span>
+            </div>
+            <div class="medium-2 cell text-right">
+                <button class="button secondary">
+                    <i class="fa fa-refresh"></i>
+                </button>
             </div>
             <div class="medium-6 cell text-left">
                 <button class="button secondary button-back ffab before fa-chevron-left">Back</button>

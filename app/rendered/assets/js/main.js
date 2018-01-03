@@ -304,6 +304,7 @@ class WalletCreateModel {
 }
 
 const MinQuestions = 5;
+const MaxQuestions = 20;
 
 class RecoveryQuestionsViewModel extends ViewModel {
     constructor() {
@@ -317,10 +318,25 @@ class RecoveryQuestionsViewModel extends ViewModel {
     }
 
     render() {
+        let self = this;
         //add a q/a
-        for (let x = 0; x < MinQuestions; x++) {
-            this.addQARow(false, false);
-        }
+        Comm.send('RecoveryQuestionsWindow.readRecovery', null, function(e, arg) {
+            if (arg && arg.questions && arg.questions.length) {
+                for (let x = 0; x < arg.questions.length; x++) {
+                    let q = arg.questions[x];
+                    let a = arg.answers[x];
+                    let tr = self.addQARow(false, false);
+                    tr.find('.question').val(q);
+                    tr.find('.answer').val(a);
+                }
+                self.updateModel();
+                self.updateMetrics();
+            } else {
+                for (let x = 0; x < MinQuestions; x++) {
+                    self.addQARow(false, false);
+                }
+            }
+        });
         //focus first input
         $('input:visible:first').focus().select();
         //help
@@ -340,7 +356,7 @@ class RecoveryQuestionsViewModel extends ViewModel {
         let self = e.data;
         $(this).closest('tr').remove();
         let qaCount = $('table.list tbody tr').length;
-        $('.button-add-qa').prop('disabled', (qaCount > 20));
+        $('.button-add-qa').prop('disabled', (qaCount >= MaxQuestions));
         self.updateMetrics();
     }
 
@@ -378,7 +394,7 @@ class RecoveryQuestionsViewModel extends ViewModel {
             alert(`Your total answer strength is too weak. Recovery records must have at least medium strength protection.`);
             return;
         }
-        Comm.send('RecoveryQuestionsWindow.setModel', self.model, function (e, arg) {
+        Comm.send('RecoveryQuestionsWindow.setRecovery', self.model, function (e, arg) {
             if (arg) {
                 window.close();
             } else {
@@ -436,7 +452,7 @@ class RecoveryQuestionsViewModel extends ViewModel {
      */
     addQARow(focus, scroll) {
         let qaCount = $('table.list tbody tr').length;
-        if (qaCount < 12) {
+        if (qaCount < MaxQuestions) {
             let html = `<tr>
                 <td><input type="text" class="question" placeholder="Enter: Question" maxlength="128" /></td>
                 <td><input type="text" class="answer" placeholder="Enter: Answer" maxlength="896" /></td>
@@ -454,8 +470,10 @@ class RecoveryQuestionsViewModel extends ViewModel {
                 tr.find('input:first').focus();
             }
             qaCount++;
+            return tr;
         }
-        $('.button-add-qa').prop('disabled', (qaCount > 20));
+        $('.button-add-qa').prop('disabled', (qaCount >= MaxQuestions));
+        return null;
     }
 
 }
@@ -626,10 +644,10 @@ class WalletCreateViewModel extends ViewModel {
     }
 
     onOpenWalletClick(e) {
-        Comm.send('openWallet', null, function (e, arg) {
+        Comm.send('MainWindow.openWallet', null, function (e, arg) {
             if (arg) {
                 $('.view').fadeOut(function () {
-                    Comm.send('loadTemplate', 'wallet-open');
+                    Comm.send('MainWindow.loadTemplate', 'wallet-open');
                 });
             }
         });
@@ -702,7 +720,7 @@ class WalletCreateViewModel extends ViewModel {
         let parent = self.parent; //hold onto ref after this view's teardown
         let button = $('.button-key-file');
         if (button.text() == 'Select Key-File') {
-            Comm.send('openKeyFile', null, function (e, arg) {
+            Comm.send('MainWindow.openKeyFile', null, function (e, arg) {
                 if (arg && arg.valid) {
                     button
                         .data('file-name', arg.keyFileName)
@@ -726,7 +744,7 @@ class WalletCreateViewModel extends ViewModel {
     onKeyFileGenerateClick(e) {
         let self = e.data;
         let parent = self.parent; //hold onto ref after this view's teardown
-        Comm.send('saveKeyFile', null, function (e, arg) {
+        Comm.send('MainWindow.saveKeyFile', null, function (e, arg) {
             if (arg && arg.valid) {
                 $('.wizard-step-password .button-key-file')
                     .data('file-name', arg.keyFileName)
@@ -763,10 +781,8 @@ class WalletCreateViewModel extends ViewModel {
     onConfigureRecovery(e) {
         let self = e.data;
         let parent = self.parent; //hold onto ref after this view's teardown
-        Comm.send('showRecoveryQuestions', null, function (e, arg) {
-            if (arg && arg.valid) {
-                $('.wizard-step-recovery .button-next').prop('disabled', true);
-            }
+        Comm.send('MainWindow.showRecoveryQuestions', null, function (e, arg) {
+            $('.wizard-step-recovery .button-next').prop('disabled', !(arg && arg.qa > 0));
         });
     }
 

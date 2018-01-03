@@ -35,10 +35,10 @@ export default class WalletCreateViewModel extends ViewModel {
     }
 
     onOpenWalletClick(e) {
-        Comm.send('openWallet', null, function (e, arg) {
+        Comm.send('MainWindow.openWallet', null, function (e, arg) {
             if (arg) {
                 $('.view').fadeOut(function () {
-                    Comm.send('loadTemplate', 'wallet-open');
+                    Comm.send('MainWindow.loadTemplate', 'wallet-open');
                 });
             }
         });
@@ -111,7 +111,7 @@ export default class WalletCreateViewModel extends ViewModel {
         let parent = self.parent; //hold onto ref after this view's teardown
         let button = $('.button-key-file');
         if (button.text() == 'Select Key-File') {
-            Comm.send('openKeyFile', null, function (e, arg) {
+            Comm.send('MainWindow.openKeyFile', null, function (e, arg) {
                 if (arg && arg.valid) {
                     button
                         .data('file-name', arg.keyFileName)
@@ -135,7 +135,7 @@ export default class WalletCreateViewModel extends ViewModel {
     onKeyFileGenerateClick(e) {
         let self = e.data;
         let parent = self.parent; //hold onto ref after this view's teardown
-        Comm.send('saveKeyFile', null, function (e, arg) {
+        Comm.send('MainWindow.saveKeyFile', null, function (e, arg) {
             if (arg && arg.valid) {
                 $('.wizard-step-password .button-key-file')
                     .data('file-name', arg.keyFileName)
@@ -172,10 +172,8 @@ export default class WalletCreateViewModel extends ViewModel {
     onConfigureRecovery(e) {
         let self = e.data;
         let parent = self.parent; //hold onto ref after this view's teardown
-        Comm.send('showRecoveryQuestions', null, function (e, arg) {
-            if (arg && arg.valid) {
-                $('.wizard-step-recovery .button-next').prop('disabled', true);
-            }
+        Comm.send('MainWindow.showRecoveryQuestions', null, function (e, arg) {
+            $('.wizard-step-recovery .button-next').prop('disabled', !(arg && arg.qa > 0));
         });
     }
 
