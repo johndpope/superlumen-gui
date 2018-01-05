@@ -16,20 +16,32 @@ export default class Security {
      * @returns {StrengthRank}
      */
     static strength(password) {
-        let lcCount = password.replace(/[^a-z]/g, '').length;
-        let ucCount = password.replace(/[^A-Z]/g, '').length;
+        let lccCount = password.replace(/[^a-z]/g, '').length;
+        let uccCount = password.replace(/[^A-Z]/g, '').length;
         let numCount = password.replace(/[^0-9]/g, '').length;
         let splCount = password.replace(/[a-zA-Z\d\s]/g, '').length;
         if (!password) {
             return { label: 'None', rank: 0 };
         }
+        let unqChars = [];
+        for (let x = 0; x < password.length; x++) {
+            if (unqChars.indexOf(password[x]) === -1) {
+                unqChars.push(password[x]);
+            }
+        }
+        // console.log(`Strength:
+        //     Length: ${(password.length > 14 ? 1 : password.length / 14)}
+        //     Unique: ${(unqChars.length > 14 ? 1 : unqChars.length / 14)}
+        //     `);
         let strength =
-            (password.length > 14 ? 1 : password.length / 14) * (
-                (lcCount > 0 ? 0.15 : 0) +
-                (ucCount > 0 ? 0.25 : 0) +
+            ((password.length > 14 ? 1 : password.length / 14) * 0.4) + 
+            ((unqChars.length > 14 ? 1 : unqChars.length / 14) * 0.3) +
+            ((
+                (lccCount > 0 ? 0.25 : 0) +
+                (uccCount > 0 ? 0.25 : 0) +
                 (numCount > 0 ? 0.25 : 0) +
-                (splCount > 0 ? 0.35 : 0)
-            );
+                (splCount > 0 ? 0.25 : 0)
+            ) * 0.3);
         let text = '';
         if (strength <= 0.2) {
             return { label: 'None', rank: strength };
