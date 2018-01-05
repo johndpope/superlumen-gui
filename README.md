@@ -29,13 +29,15 @@ Showing the first steps of creating a new wallet...
   - [ ] Multi-account support.
   - [ ] Account memo records.
   - [ ] Set inflation pool.
+  - [ ] Configure multi-signature.
 - Send/Recieve
   - [ ] Send Lumens (XLM) or any Stellar asset.
   - [ ] Leverage Path Payments to pay with one asset, converted to another through the network as a series of offers.
   - [ ] Receive by crafting a secure message.
 - Stellar Distributed Exchange
-  - [ ] Watch &amp; subscribe to orderbooks between assets.
+  - [ ] Watch &amp; orders stream between assets.
   - [ ] Create your own buy/sell orders.
+  - [ ] Create passive orders.
   - [ ] Manage trustlines.
 - Transaction Explorer
   - [ ] Browse and view the details of any tx on the blockchain.
