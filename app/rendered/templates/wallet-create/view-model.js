@@ -2,6 +2,7 @@ import Comm from '../../util/comm.js'
 import ViewModel from '../view-model.js';
 import Model from './model.js';
 import Wizard from '../../components/wizard/wizard.js';
+import Security from '../../util/security.js';
 
 export default class WalletCreateViewModel extends ViewModel {
     constructor() {
@@ -30,6 +31,8 @@ export default class WalletCreateViewModel extends ViewModel {
         //recovery
         $('.wizard-step-recovery input[type="checkbox"]').change(this, this.onRecoveryChecked);
         $('.wizard-step-recovery .button-setup-recovery').click(this, this.onConfigureRecovery);
+        //accounts
+        $('.wizard-step-accounts .button-new-account').click(this, this.onNewAccount);
         //bind the wizard component
         new Wizard($('.wizard')).bind();
     }
@@ -47,40 +50,21 @@ export default class WalletCreateViewModel extends ViewModel {
     onPasswordChange(e) {
         var self = e.data;
         let pw = $('input[name="text-password"]').val();
-        let lcCount = pw.replace(/[^a-z]/g, '').length;
-        let ucCount = pw.replace(/[^A-Z]/g, '').length;
-        let numCount = pw.replace(/[^0-9]/g, '').length;
-        let splCount = pw.replace(/[a-zA-Z\d\s]/g, '').length;
-        let strength =
-            (pw.length > 14 ? 1 : pw.length / 14) * (
-                (lcCount > 0 ? 0.15 : 0) +
-                (ucCount > 0 ? 0.25 : 0) +
-                (numCount > 0 ? 0.25 : 0) +
-                (splCount > 0 ? 0.35 : 0)
-            );
         if (pw) {
+            let strength = Security.strength(pw);
             $('.wizard-step-password .progress').show().removeClass('alert warning primary');
             let text = '';
             if (strength <= 0.4) {
                 $('.progress').addClass('alert');
-                text = (strength > 0.2 ? 'weak' : '');
-            } else if (strength <= 0.6) {
+            } else if (strength <= 0.7) {
                 $('.progress').addClass('warning');
-                text = 'medium';
-            } else if (strength <= 0.8) {
-                $('.progress').addClass('warning');
-                text = 'strong';
-            } else if (strength <= 0.95) {
-                $('.progress').addClass('primary');
-                text = 'great';
             } else {
                 $('.progress').addClass('primary');
-                text = 'superlumenal';
             }
             $('.wizard-step-password .progress .progress-meter')
-                .data('strength', strength)
-                .css('width', (strength * 100) + '%');
-            $('.wizard-step-password .progress .progress-meter-text').text(text);
+                .data('strength', strength.rank)
+                .css('width', (strength.rank * 100) + '%');
+            $('.wizard-step-password .progress .progress-meter-text').text(strength.label);
         } else {
             $('.wizard-step-password .progress').hide();
             $('.wizard-step-password .progress .progress-meter').data('strength', 0);
@@ -164,8 +148,8 @@ export default class WalletCreateViewModel extends ViewModel {
 
     onRecoveryChecked(e) {
         let recoveryEnabled = $('.wizard-step-recovery input[type="checkbox"]').is(':checked');
-        let hasQA = true; //TODO
-        $('.wizard-step-recovery .button-next').prop('disabled', recoveryEnabled || (recoveryEnabled && !hasQA));
+        let hasQA = $('.wizard-step-recovery .button-setup-recovery').data('hasQA');
+        $('.wizard-step-recovery .button-next').prop('disabled', recoveryEnabled && !hasQA);
         $('.wizard-step-recovery .button-setup-recovery').prop('disabled', !recoveryEnabled);
     }
 
@@ -174,8 +158,16 @@ export default class WalletCreateViewModel extends ViewModel {
         let parent = self.parent; //hold onto ref after this view's teardown
         Comm.send('MainWindow.showRecoveryQuestions', null, function (e, arg) {
             $('.wizard-step-recovery .button-next').prop('disabled', !(arg && arg.qa > 0));
+            $('.wizard-step-recovery .button-setup-recovery').data('hasQA', (arg && arg.qa > 0));
         });
     }
 
+    onNewAccount(e) {
+        let self = e.data;
+        Comm.send('MainWindow.wire', { path: 'accounts.create' }, function (e, arg) {
+            $('.wizard-step-accounts .text-account-id').val(arg.publicKey);
+            $('.wizard-step-accounts .text-account-secret').val(arg.privateKey);
+        });
+    }
 
 }

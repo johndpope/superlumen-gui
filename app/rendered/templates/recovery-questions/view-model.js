@@ -90,7 +90,7 @@ export default class RecoveryQuestionsViewModel extends ViewModel {
         if (self.model.answers.length < MinQuestions) {
             alert(`At least ${MinQuestions} questions must be configured.`);
             return;
-        } else if (str.rank <= 0.4) {
+        } else if (str.rank <= 0.5) {
             alert(`Your total answer strength is too weak. Recovery records must have at least medium strength protection.`);
             return;
         }
@@ -122,8 +122,8 @@ export default class RecoveryQuestionsViewModel extends ViewModel {
         //get strength
         let str = Security.strength(concatpw);
         //update UI
-        $('#span-answer-count').text(count);
-        $('#span-answer-strength').text(str.label);
+        $('.span-answer-count').text(count);
+        $('.span-answer-strength').text(str.label);
         $('.button-save').prop('disabled', (count < 5));
         return str;
     }

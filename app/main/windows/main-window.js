@@ -5,7 +5,9 @@ const fs = require('fs');
 const electron = require('electron');
 const Config = require('../data/config.js');
 const Wallet = require('../data/wallet.js');
+const WireManager = require('../wire/wire-manager.js');
 const Window = require('./window.js');
+const Comm = require('../util/comm.js');
 const AboutWindow = require('./about-window.js');
 const RecoveryQuestionsWindow = require('./recovery-questions-window.js');
 
@@ -24,24 +26,28 @@ module.exports = class MainWindow extends Window {
         });
 
         /**
+         * @type {WireManager}
+         */
+        this.wire = null;
+
+        /**
          * @type {Wallet}
          */
-        this.wallet = new Wallet();
+        this.wallet = null;
 
         let self = this;
+        this.setWallet();
         //set app menus
         let menu = electron.Menu.buildFromTemplate(this.menuTemplate());
         electron.Menu.setApplicationMenu(menu);
         //setup ipc communication
-        electron.ipcMain.on('MainWindow.openWallet', this.openWallet);
-        electron.ipcMain.on('MainWindow.openKeyFile', this.openKeyFile);
-        electron.ipcMain.on('MainWindow.saveKeyFile', this.saveKeyFile);
-        electron.ipcMain.on('MainWindow.showAbout', this.showAbout);
-        electron.ipcMain.on('MainWindow.showRecoveryQuestions', this.showRecoveryQuestions);
-        electron.ipcMain.on('MainWindow.loadTemplate', function (e, arg) {
-            e.returnValue = true;
-            self.loadTemplate(arg);
-        });
+        Comm.listen(this, 'MainWindow.openWallet', this.openWallet);
+        Comm.listen(this, 'MainWindow.openKeyFile', this.openKeyFile);
+        Comm.listen(this, 'MainWindow.saveKeyFile', this.saveKeyFile);
+        Comm.listen(this, 'MainWindow.showAbout', this.showAbout);
+        Comm.listen(this, 'MainWindow.showRecoveryQuestions', this.showRecoveryQuestions);
+        Comm.listen(this, 'MainWindow.loadTemplate', this.loadTemplate);
+        Comm.listen(this, 'MainWindow.wire', this.onWire);
         //load the main template
         if (Config.lastFile) {
             this.loadTemplate('wallet-open');
@@ -50,7 +56,44 @@ module.exports = class MainWindow extends Window {
         }
     }
 
-    openWallet(e, arg, callback) {
+    loadTemplate(msg) {
+        super.loadTemplate(msg.arg ? msg.arg : msg);
+    }
+
+    onWire(msg) {
+        if (msg.arg && msg.arg.path && this.wallet && this.wire) {
+            let comps = msg.arg.path.split('.');
+            if (comps && comps.length) {
+                let index = 0;
+                let w = this.wire;
+                while (index < comps.length - 1) {
+                    w = w[comps[index]];
+                    index++;
+                }
+                let f = w[comps[index]];
+                if (typeof w === 'object' && typeof f === 'function') {
+                    let fargs = [];
+                    if (typeof msg.arg.args !== 'undefined') {
+                        if (Array.isArray(msg.arg.args)) {
+                            fargs = msg.arg.args;
+                        } else {
+                            fargs = [msg.arg.args];
+                        }
+                    }
+                    //all wire calls should have a callback as the last argument and handle optional arguments before.
+                    fargs.push(function (data) {
+                        Comm.respond(msg, data); //send the resulting data from the wire call
+                    });
+                    //make the wire call
+                    let data = f.apply(w, fargs);
+                } else {
+                    throw new Error('Wire chain failed to produce an object and function.');
+                }
+            }
+        }
+    }
+
+    openWallet(msg) {
         electron.dialog.showOpenDialog({
             filters: [
                 { name: 'Superlumen Wallet', extensions: ['slw'] }
@@ -61,16 +104,11 @@ module.exports = class MainWindow extends Window {
                 fileName = fileNames[0];
                 Config.lastFile = fileName;
             }
-            if (e && e.sender) {
-                e.sender.send('MainWindow.openWallet', fileName);
-            }
-            if (callback) {
-                callback(fileName);
-            }
+            Comm.respond(msg, fileName);
         });
     }
 
-    openKeyFile(e, arg) {
+    openKeyFile(msg) {
         electron.dialog.showOpenDialog({
             title: 'Add Key File',
             filters: [
@@ -78,42 +116,28 @@ module.exports = class MainWindow extends Window {
             ]
         }, function (fileNames) {
             if (!fileNames) {
-                if (e && e.sender) {
-                    e.sender.send('MainWindow.openKeyFile', null);
-                }
+                Comm.respond(msg, null);
                 return;
             };
             let fileName = fileNames[0];
+            let valid = true;
             //check file size.
-            let stats = fs.statSync(fileName)
+            let stats = fs.statSync(fileName);
             if (stats.size > Wallet.MaxKeyFileSize) {
                 electron.dialog.showErrorBox('Invalid Size', `The file selected is too large (${Math.round(stats.size / 1024)}KB). The maximum is ${Wallet.MaxKeyFileSize / 1024}KB.`);
-                if (e && e.sender) {
-                    e.sender.send('MainWindow.openKeyFile', {
-                        valid: false,
-                        keyFileName: fileName
-                    });
-                }
+                valid = false;
             } else if (stats.size < Wallet.MinKeyFileSize) {
                 electron.dialog.showErrorBox('Invalid Size', `The file selected is too small (${Math.round(stats.size)} Bytes). The minimum is ${Wallet.MinKeyFileSize} Bytes.`);
-                if (e && e.sender) {
-                    e.sender.send('MainWindow.openKeyFile', {
-                        valid: false,
-                        keyFileName: fileName
-                    });
-                }
-            } else {
-                if (e && e.sender) {
-                    e.sender.send('MainWindow.openKeyFile', {
-                        valid: true,
-                        keyFileName: fileName
-                    });
-                }
+                valid = false;
             }
+            Comm.respond(msg, {
+                valid: valid,
+                keyFileName: fileName
+            });
         });
     }
 
-    saveKeyFile(e, arg) {
+    saveKeyFile(msg) {
         electron.dialog.showSaveDialog({
             title: 'Save Generated Key File',
             filters: [
@@ -122,51 +146,63 @@ module.exports = class MainWindow extends Window {
             ]
         }, function (fileName) {
             if (!fileName) {
-                if (e && e.sender) {
-                    e.sender.send('MainWindow.saveKeyFile', null);
-                }
+                Comm.respond(msg, null);
                 return;
             };
             let buf = crypto.randomBytes(1024 * 4);
             fs.writeFile(fileName, buf, function (err) {
                 if (err) {
                     electron.dialog.showErrorBox('Error Writing Key File', 'There was an error writing the key file:\n' + err);
-                    if (e && e.sender) {
-                        e.sender.send('MainWindow.saveKeyFile', {
-                            valid: false,
-                            keyFileName: fileName
-                        });
-                    }
+                    Comm.respond(msg, {
+                        valid: false,
+                        keyFileName: fileName
+                    });
                 } else {
-                    if (e && e.sender) {
-                        e.sender.send('saveKeyFile', {
-                            valid: true,
-                            keyFileName: fileName
-                        });
-                    }
+                    Comm.respond(msg, {
+                        valid: true,
+                        keyFileName: fileName
+                    });
                 }
             });
         });
     }
 
-    showAbout(e, arg) {
-        let self = e && e.sender && e.sender.browserWindowOptions ? e.sender.browserWindowOptions.window : this;
+    showAbout(msg) {
+        let self = msg && msg.window ? msg.window : this;
         var popup = new AboutWindow(self);
+        //don't respond or callback until the dialog is closed.
+        win.windowRef.on('close', function () {
+            let rr = self.wallet.recovery;
+            Comm.respond(msg, true);
+        });
         popup.show();
+        return true;
     }
 
-    showRecoveryQuestions(e, arg) {
-        let self = e && e.sender && e.sender.browserWindowOptions ? e.sender.browserWindowOptions.window : this;
+    showRecoveryQuestions(msg) {
+        let self = msg && msg.window ? msg.window : this;
         let win = new RecoveryQuestionsWindow(self);
+        //don't respond or callback until the dialog is closed.
         win.windowRef.on('close', function () {
-            if (e && e.sender) {
-                let rr = self.wallet.recovery;
-                e.sender.send('MainWindow.showRecoveryQuestions', {
-                    qa: (rr ? rr.questions.length : 0)
-                });
-            }
-        })
+            let rr = self.wallet.recovery;
+            Comm.respond(msg, {
+                qa: (rr ? rr.questions.length : 0)
+            });
+        });
         win.show();
+        return true;
+    }
+
+    /**
+     * Removes the old wallet instance and replaces it with the new one, setting up wires as needed.
+     * @param {Wallet} wallet 
+     */
+    setWallet(wallet) {
+        this.wallet = (wallet ? wallet : new Wallet());
+        //add wires
+        this.wire = new WireManager(this.wallet);
+        //return the newly applied wallet
+        return wallet;
     }
 
     menuTemplate() {
@@ -181,7 +217,7 @@ module.exports = class MainWindow extends Window {
                         click: function () {
                             if (!self.wallet || (self.wallet && self.wallet.accounts.length === 0)) {
                                 //no wallet yet anyway, just load the template without asking
-                                self.wallet = new Wallet();
+                                self.setWallet();
                                 self.loadTemplate('wallet-create');
                             } else {
                                 electron.dialog.showMessageBox(self.windowRef, {
@@ -191,7 +227,7 @@ module.exports = class MainWindow extends Window {
                                     buttons: ['No', 'Yes']
                                 }, function (resp) {
                                     if (resp === 1) {
-                                        self.wallet = new Wallet();
+                                        self.setWallet();
                                         self.loadTemplate('wallet-create');
                                     }
                                 });
@@ -204,7 +240,7 @@ module.exports = class MainWindow extends Window {
                         click: function () {
                             self.openWallet(null, null, function (fileName) {
                                 if (fileName) {
-                                    self.wallet = new Wallet();
+                                    self.setWallet();
                                     self.loadTemplate('wallet-open');
                                 }
                             });

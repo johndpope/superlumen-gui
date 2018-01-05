@@ -1,13 +1,16 @@
-.switch {
-    font-weight: normal;
-
-    label {
-        font-size: 70%;
+table {
+    thead, tfoot {
+        &.normal, & td.normal, & tr.normal td {
+            font-weight: normal;
+            font-style: normal;
+        }
     }
 }
 
-.button {
-    min-width: 40px;
+blockquote {
+    background: rgba(#FFFFFF, 0.3);
+    padding-top: 1rem;
+    padding-bottom: 0.4rem;
 }
 
 input,
@@ -23,10 +26,23 @@ select {
     }
 }
 
-blockquote {
-    background: rgba(#FFFFFF, 0.3);
-    padding-top: 1rem;
-    padding-bottom: 0.4rem;
+input,
+textarea {
+    &[readonly], &:read-only {
+        cursor: text;
+    }
+}
+
+.switch {
+    font-weight: normal;
+
+    label {
+        font-size: 70%;
+    }
+}
+
+.button {
+    min-width: 40px;
 }
 
 .text-small {

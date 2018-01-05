@@ -26,7 +26,7 @@ module.exports = class RecoveryQuestionsWindow extends Window {
         });
 
         //set app menus
-        this.windowRef.setMenu(null); //no menu
+        //this.windowRef.setMenu(null); //no menu
         //setup ipc communication
         electron.ipcMain.on('RecoveryQuestionsWindow.setRecovery', this.setRecovery);
         electron.ipcMain.on('RecoveryQuestionsWindow.readRecovery', this.readRecovery);

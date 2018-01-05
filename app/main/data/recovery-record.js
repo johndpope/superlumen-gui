@@ -20,8 +20,8 @@ module.exports = class Recovery {
         this.answers = [];
 
         /**
-         * Stores account records. When locked, the entire array is encrypted using the recovery password as a hex string. 
-         * When unlocked, this field is an array of the answers (strings).
+         * Stores account records. When locked, the entire array is encrypted using the recovery password as a hex 
+         * string. When unlocked, this field is an array of the answers (strings).
          * @type {String|Array.<Account>}
          */
         this.accounts = [];

@@ -9,7 +9,7 @@
     <script src="../../assets/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../../assets/bower_components/foundation-sites/dist/js/foundation.min.js"></script>
     <script src="../../assets/js/main.js"></script>
-    <script>if (window.module) module = window.module;</script> 
+    <script>if (window.module) module = window.module;</script>
 </head>
 
 <body id="recovery-questions">
@@ -17,10 +17,12 @@
         <div class="grid-x grid-padding-x">
             <div class="medium-12 cell">
                 <p>
-                    Your recovery record is protected by a set of questions and answers that <em>you</em> create. 
-                    The more questions and the more complex the answers, the more secure your wallet recovery record.
+                    Your recovery record is protected by a set of questions and answers that
+                    <em>you</em> create. The more questions and the more complex the answers, the more secure your wallet recovery
+                    record.
                 </p>
-                <a id="link-help-guidelines"><i class="fa fa-info-circle"></i> View some helpful guidelines...</a>
+                <a id="link-help-guidelines">
+                    <i class="fa fa-info-circle"></i> View some helpful guidelines...</a>
                 <ol id="help-guidelines">
                     <li>Ask questions that you'll know the answer to years from now. Recovery is useless if you can't answer
                         your own questions.</li>
@@ -31,18 +33,25 @@
                 <hr />
             </div>
             <div class="medium-12 cell">
-                <h4><span id="span-answer-count">0</span> / 5 Required Questions &amp; Answers</h4>
-            </div>
-            <div class="medium-12 cell">
-                Total Answer Complexity: <span id="span-answer-strength">None</span>
-            </div>
-            <div class="medium-12 cell">
                 <table class="list">
+                    <thead>
+                        <tr class="normal">
+                            <td colspan="3">
+                                <span class="span-answer-count">0</span> / 5 Required Questions &amp; Answers
+                                <br /> Answer Complexity:
+                                <span class="span-answer-strength">None</span>
+                            </td>
+                    </thead>
                     <tbody>
                     </tbody>
                     <tfoot>
-                        <tr>
-                            <td colspan="3" class="text-right">
+                        <tr class="normal">
+                            <td colspan="2">
+                                <span class="span-answer-count">0</span> / 5 Required Questions &amp; Answers
+                                <br /> Answer Complexity:
+                                <span class="span-answer-strength">None</span>
+                            </td>
+                            <td class="text-right">
                                 <button class="button button-add-qa">
                                     <i class="fa fa-plus"></i>
                                 </button>

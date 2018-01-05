@@ -1,15 +1,41 @@
 
 module.exports = class Account {
-
+    /**
+     * @constructor
+     * @param {String} label 
+     * @param {String} publicKey 
+     * @param {String} privateKey 
+     * @param {Date} [dateCreated]
+     */
     constructor(label, publicKey, privateKey, dateCreated) {
-        if (privateKey && privateKey instanceof SecureString === false) {
-            throw new Error('The "privateKey" argument must be a SecureString.');
+        if (!label) {
+            throw new Error('The "label" argument is required.');
+        } else if (!publicKey) {
+            throw new Error('The "publicKey" argument is required.');
+        } else if (!privateKey) {
+            throw new Error('The "privateKey" argument is required.');
         }
 
-        this.Label = label || 'My New Wallet';
-        this.PublicKey = publicKey || null;
-        this.PrivateKey = privateKey || null;
-        this.DateCreated = dateCreated || Date.now();
+        /**
+         * @type {String}
+         */
+        this.label = label || 'My New Wallet';
+
+        /**
+        * @type {String}
+        */
+        this.publicKey = publicKey || null;
+
+        /**
+        * @type {String}
+        */
+        this.privateKey = privateKey || null;
+
+        /**
+        * @type {Date}
+        */
+        this.dateCreated = dateCreated || new Date();
+
     }
 
 }

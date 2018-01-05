@@ -4646,10 +4646,10 @@ label > [type='radio'] {
 label {
   display: block;
   margin: 0;
-  font-size: 1.09375rem;
+  font-size: 0.8rem;
   font-weight: normal;
-  line-height: 1.8;
-  color: #fefefe; }
+  line-height: 1.2;
+  color: #303030; }
   label.middle {
     margin: 0 0 1.25rem;
     padding: 0.70312rem 0; }
@@ -7570,13 +7570,14 @@ a.thumbnail {
 .ffab.hollow.static::after {
   transition: border-color 0.25s ease-out; }
 
-.switch {
-  font-weight: normal; }
-  .switch label {
-    font-size: 70%; }
+table thead.normal, table thead td.normal, table thead tr.normal td, table tfoot.normal, table tfoot td.normal, table tfoot tr.normal td {
+  font-weight: normal;
+  font-style: normal; }
 
-.button {
-  min-width: 40px; }
+blockquote {
+  background: rgba(255, 255, 255, 0.3);
+  padding-top: 1rem;
+  padding-bottom: 0.4rem; }
 
 input:focus,
 textarea:focus,
@@ -7589,10 +7590,18 @@ select:focus {
   select:focus[placeholder] {
     color: white; }
 
-blockquote {
-  background: rgba(255, 255, 255, 0.3);
-  padding-top: 1rem;
-  padding-bottom: 0.4rem; }
+input[readonly], input:read-only,
+textarea[readonly],
+textarea:read-only {
+  cursor: text; }
+
+.switch {
+  font-weight: normal; }
+  .switch label {
+    font-size: 70%; }
+
+.button {
+  min-width: 40px; }
 
 .text-small {
   line-height: 1rem;

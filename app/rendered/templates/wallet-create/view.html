@@ -1,5 +1,4 @@
-{% extends "../_layout/view.html" %} 
-{% block body %}
+{% extends "../_layout/view.html" %} {% block body %}
 <img class="logo" src="../../assets/images/icons/icon-512x512.png" alt="Superlumen" />
 <div class="grid-container wizard">
     <section class="wizard-step active wizard-step-setup">
@@ -136,14 +135,32 @@
                     </label>
                 </div>
             </div>
-            <div class="medium-10 cell">
-                Account ID:
-                <span class="span-account-id"></span>
+            <div class="medium-12 cell">
+                <label for="">Account ID (Public Key)</label>
+                <div class="input-group">
+                    <input class="input-group-field text-account-id" type="text" readonly>
+                    <div class="input-group-button">
+                        <button class="button secondary button-account-id-copy" title="Copy to Clipboard">
+                            <i class="fa fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="input-group-button">
+                        <button class="button secondary button-new-account" title="Generate a New Account">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="medium-2 cell text-right">
-                <button class="button secondary">
-                    <i class="fa fa-refresh"></i>
-                </button>
+            <div class="medium-12 cell">
+                <label for="">Secret (Private Key)</label>
+                <div class="input-group">
+                    <input class="input-group-field text-account-secret" type="password" readonly>
+                    <div class="input-group-button">
+                        <button class="button secondary button-account-secret-copy" title="Copy to Clipboard">
+                            <i class="fa fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="medium-6 cell text-left">
                 <button class="button secondary button-back ffab before fa-chevron-left">Back</button>
