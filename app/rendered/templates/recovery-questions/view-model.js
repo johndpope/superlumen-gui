@@ -90,7 +90,7 @@ export default class RecoveryQuestionsViewModel extends ViewModel {
         if (self.model.answers.length < MinQuestions) {
             alert(`At least ${MinQuestions} questions must be configured.`);
             return;
-        } else if (str.rank <= 0.5) {
+        } else if (str.rank <= Security.StrengthWeak) {
             alert(`Your total answer strength is too weak. Recovery records must have at least medium strength protection.`);
             return;
         }

@@ -110,7 +110,7 @@ module.exports = class MainWindow extends Window {
 
     openKeyFile(msg) {
         electron.dialog.showOpenDialog({
-            title: 'Add Key File',
+            title: 'Select Key File',
             filters: [
                 { name: 'Any Small File (<= 16KB)' }
             ]
@@ -139,7 +139,7 @@ module.exports = class MainWindow extends Window {
 
     saveKeyFile(msg) {
         electron.dialog.showSaveDialog({
-            title: 'Save Generated Key File',
+            title: 'Generate Key File',
             filters: [
                 { name: 'Key File', extensions: ['key'] },
                 { name: 'Random Binary File', extensions: ['*'] }

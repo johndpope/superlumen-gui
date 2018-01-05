@@ -43,15 +43,15 @@ export default class Security {
                 (splCount > 0 ? 0.25 : 0)
             ) * 0.25);
         let text = '';
-        if (strength <= 0.2) {
+        if (strength <= Security.StrengthNone) {
             return { label: 'None', rank: strength };
-        } else if (strength <= 0.5) {
+        } else if (strength <= Security.StrengthWeak) {
             return { label: 'Weak', rank: strength };
-        } else if (strength <= 0.7) {
+        } else if (strength <= Security.StrengthMedium) {
             return { label: 'Medium', rank: strength };
-        } else if (strength <= 0.85) {
+        } else if (strength <= Security.StrengthStrong) {
             return { label: 'Strong', rank: strength };
-        } else if (strength <= 0.95) {
+        } else if (strength <= Security.StrengthGreat) {
             return { label: 'Great', rank: strength };
         } else {
             return { label: 'Superlumenal', rank: strength };
@@ -59,3 +59,10 @@ export default class Security {
     }
 
 }
+
+Security.StrengthNone = 0.2;
+Security.StrengthWeak= 0.5;
+Security.StrengthMedium = 0.65;
+Security.StrengthStrong = 0.75;
+Security.StrengthGreat = 0.85;
+Security.StrengthSuperlumenal = 1;

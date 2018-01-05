@@ -288,15 +288,15 @@ class Security {
                 (numCount > 0 ? 0.25 : 0) +
                 (splCount > 0 ? 0.25 : 0)
             ) * 0.25);
-        if (strength <= 0.2) {
+        if (strength <= Security.StrengthNone) {
             return { label: 'None', rank: strength };
-        } else if (strength <= 0.5) {
+        } else if (strength <= Security.StrengthWeak) {
             return { label: 'Weak', rank: strength };
-        } else if (strength <= 0.7) {
+        } else if (strength <= Security.StrengthMedium) {
             return { label: 'Medium', rank: strength };
-        } else if (strength <= 0.85) {
+        } else if (strength <= Security.StrengthStrong) {
             return { label: 'Strong', rank: strength };
-        } else if (strength <= 0.95) {
+        } else if (strength <= Security.StrengthGreat) {
             return { label: 'Great', rank: strength };
         } else {
             return { label: 'Superlumenal', rank: strength };
@@ -304,6 +304,13 @@ class Security {
     }
 
 }
+
+Security.StrengthNone = 0.2;
+Security.StrengthWeak= 0.5;
+Security.StrengthMedium = 0.65;
+Security.StrengthStrong = 0.75;
+Security.StrengthGreat = 0.85;
+Security.StrengthSuperlumenal = 1;
 
 class WalletCreateModel {
     constructor() {
@@ -402,7 +409,7 @@ class RecoveryQuestionsViewModel extends ViewModel {
         if (self.model.answers.length < MinQuestions) {
             alert(`At least ${MinQuestions} questions must be configured.`);
             return;
-        } else if (str.rank <= 0.5) {
+        } else if (str.rank <= Security.StrengthWeak) {
             alert(`Your total answer strength is too weak. Recovery records must have at least medium strength protection.`);
             return;
         }
@@ -673,9 +680,9 @@ class WalletCreateViewModel extends ViewModel {
         if (pw) {
             let strength = Security.strength(pw);
             $('.wizard-step-password .progress').show().removeClass('alert warning primary');
-            if (strength <= 0.4) {
+            if (strength.rank <= Security.StrengthWeak) {
                 $('.progress').addClass('alert');
-            } else if (strength <= 0.7) {
+            } else if (strength.rank <= Security.StrengthMedium) {
                 $('.progress').addClass('warning');
             } else {
                 $('.progress').addClass('primary');
@@ -756,7 +763,7 @@ class WalletCreateViewModel extends ViewModel {
 
     onPasswordNextClick(e) {
         let strength = $('.wizard-step-password .progress .progress-meter').data('strength');
-        if (strength < 0.4) {
+        if (strength < Security.StrengthWeak) {
             if (!confirm('Your password is weak, are you sure you want to continue?')) {
                 $('.wizard-step-password input[name="text-password"]').focus().select();
                 e.preventDefault();

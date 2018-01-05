@@ -54,9 +54,9 @@ export default class WalletCreateViewModel extends ViewModel {
             let strength = Security.strength(pw);
             $('.wizard-step-password .progress').show().removeClass('alert warning primary');
             let text = '';
-            if (strength <= 0.4) {
+            if (strength.rank <= Security.StrengthWeak) {
                 $('.progress').addClass('alert');
-            } else if (strength <= 0.7) {
+            } else if (strength.rank <= Security.StrengthMedium) {
                 $('.progress').addClass('warning');
             } else {
                 $('.progress').addClass('primary');
@@ -137,7 +137,7 @@ export default class WalletCreateViewModel extends ViewModel {
 
     onPasswordNextClick(e) {
         let strength = $('.wizard-step-password .progress .progress-meter').data('strength');
-        if (strength < 0.4) {
+        if (strength < Security.StrengthWeak) {
             if (!confirm('Your password is weak, are you sure you want to continue?')) {
                 $('.wizard-step-password input[name="text-password"]').focus().select();
                 e.preventDefault();
