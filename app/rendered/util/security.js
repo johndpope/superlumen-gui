@@ -34,14 +34,14 @@ export default class Security {
         //     Unique: ${(unqChars.length > 14 ? 1 : unqChars.length / 14)}
         //     `);
         let strength =
-            ((password.length > 14 ? 1 : password.length / 14) * 0.4) + 
-            ((unqChars.length > 14 ? 1 : unqChars.length / 14) * 0.3) +
+            ((password.length > 14 ? 1 : password.length / 14) * 0.3) + 
+            ((unqChars.length > 14 ? 1 : unqChars.length / 14) * 0.45) +
             ((
                 (lccCount > 0 ? 0.25 : 0) +
                 (uccCount > 0 ? 0.25 : 0) +
                 (numCount > 0 ? 0.25 : 0) +
                 (splCount > 0 ? 0.25 : 0)
-            ) * 0.3);
+            ) * 0.25);
         let text = '';
         if (strength <= 0.2) {
             return { label: 'None', rank: strength };
