@@ -1,24 +1,6 @@
 # SUPERLUMEN
 A powerful, open-source, free [Lumen](https://www.stellar.org/lumens/) wallet, blockchain explorer, and exchange interface for [Stellar Core](https://www.stellar.org/) blockchain networks. Superlumen is more than just a basic wallet. Our goal is to provide a tool and interface that leverages the Stellar network features to their fullest. Here's just a few features to look forward to:
 
-- Secure Wallet.
-  - Optional recovery record forwhen you've lost your key-file or forgotten your password.
-  - Multi-account support.
-  - Keep memo records.
-  - Set inflation pool.
-- Send/Recieve
-  - Send Lumens (XLM) or any Stellar asset.
-  - Leverage Path Payments to pay with one asset, converted to another through the network as a series of offers.
-  - Receive by crafting a secure message.
-- Stellar Distributed Exchange
-  - Watch &amp; subscribe to orderbooks between assets.
-  - Create your own buy/sell orders.
-- Transaction Explorer
-  - Browse and view the details of any tx on the blockchain.
-  - Easily review the transactions on your accounts.
-- Asset Manager
-  - Review and manage the assets owned by your accounts.
-
 ### !!This wallet is not yet functional.
 ### Currently under active development. **Beta ETA Jan 2018.**
 
@@ -29,14 +11,36 @@ Showing the first steps of creating a new wallet...
 ![Preview](https://thumbs.gfycat.com/SecondaryThirdEland-size_restricted.gif)
 
 > #### Support the free and open development of Superlumen
-> We are not associated with IBM, the Stellar Org, or any other company. This project is maintained by ordinary people just like you. You can show your support by contributing code, content, bug reports, or by donating some lumens.  
-> ❤ We really appreciate it!  
+> We are *not* associated with the [SDF](https://www.stellar.org/), IBM, or any other commercial entity. This project is maintained by ordinary people just like you. You can show your support by contributing code, content, bug reports, or by donating some lumens.  ❤ We really appreciate it!  
 > 
 > *Stellar Donation Address:*  
 > GBOBXLZCZWCP4A3FAWX7244JFFEDTVR75L4AK45Z5ZOCQV3NHNSYWQX2  
 > 
 
 ---
+
+## Features
+
+- Secure Wallet.
+  - Optional recovery record forwhen you've lost your key-file or forgotten your password.
+  - Multi-account support.
+  - Account memo records.
+  - Set inflation pool.
+- Send/Recieve
+  - Send Lumens (XLM) or any Stellar asset.
+  - Leverage Path Payments to pay with one asset, converted to another through the network as a series of offers.
+  - Receive by crafting a secure message.
+- Stellar Distributed Exchange
+  - Watch &amp; subscribe to orderbooks between assets.
+  - Create your own buy/sell orders.
+  - Manage trustlines.
+- Transaction Explorer
+  - Browse and view the details of any tx on the blockchain.
+  - Easily review the transactions on your accounts.
+- Asset Manager
+  - Review and manage the assets owned by your accounts.
+- Feature Vote
+  - Vote for new features of Superlumen, using Stellar!
 
 ## Building
 You can build Superlumen on the following operating systems:
