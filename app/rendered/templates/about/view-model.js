@@ -9,20 +9,12 @@ export default class AboutViewModel extends ViewModel {
         return new AboutViewModel();
     }
 
-    render() { }
-
-}
-
-
-export class TacowModel extends ViewModel {
-    constructor() {
-        super();
+    render() {
+        $('.button-close').click(this, this.onCloseClick);
     }
 
-    static init() {
-        return new AboutViewModel();
+    onCloseClick(e) {
+        window.close();
     }
-
-    render() { }
 
 }

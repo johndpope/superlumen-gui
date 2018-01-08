@@ -108,25 +108,21 @@
             <div class="medium-5 cell text-right">
                 <button class="button secondary button-setup-recovery ffab fa-gear">Configure</button>
             </div>
-            <div class="medium-6 cell text-left">
+            <div class="medium-4 cell text-left">
                 <button class="button secondary button-back ffab before fa-chevron-left">Back</button>
             </div>
-            <div class="medium-6 cell text-right">
-                <button class="button button-next ffab fa-chevron-right" disabled>Next: Add Accounts</button>
+            <div class="medium-8 cell text-right">
+                <button class="button button-next ffab fa-chevron-right" disabled>Next: Startup Account</button>
             </div>
         </div>
     </section>
     <section class="wizard-step wizard-step-accounts">
         <div class="grid-x grid-margin-x">
             <div class="medium-12 cell">
-                <h1>Account</h1>
-                <p>
-                    Superlumen needs at least one account to run. You can choose to create a new account or add an existing one using its public
-                    and private keys. You can add additional accounts after setup.
-                </p>
+                <h1>Startup Account</h1>
             </div>
             <div class="medium-12 cell">
-                <span class="span-switch-label">Create new account?</span>
+                <span class="span-switch-label">Create a new account?</span>
                 <div class="switch">
                     <input class="switch-input wizard-default-focus" id="checkbox-new-account" type="checkbox" checked>
                     <label class="switch-paddle" for="checkbox-new-account">
@@ -136,11 +132,22 @@
                 </div>
             </div>
             <div class="medium-12 cell">
-                <label for="">Account ID (Public Key)</label>
+                <label for="select-account-network">Network</label>
                 <div class="input-group">
-                    <input class="input-group-field text-account-id" type="text" readonly>
+                    <select class="select-account-network" id="select-account-network"></select>
                     <div class="input-group-button">
-                        <button class="button secondary button-account-id-copy" title="Copy to Clipboard">
+                        <button class="button secondary button-manage-networks" title="Manage Networks">
+                            <i class="fa fa-cogs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="medium-12 cell">
+                <label for="text-account-id">Account ID (Public Key)</label>
+                <div class="input-group">
+                    <input class="input-group-field text-account-id" id="text-account-id" type="text" readonly>
+                    <div class="input-group-button">
+                        <button class="button secondary button-account-id-copy" title="Copy the Account ID to Clipboard">
                             <i class="fa fa-copy"></i>
                         </button>
                     </div>
@@ -156,7 +163,7 @@
                 <div class="input-group">
                     <input class="input-group-field text-account-secret" type="password" readonly>
                     <div class="input-group-button">
-                        <button class="button secondary button-account-secret-copy" title="Copy to Clipboard">
+                        <button class="button secondary button-account-secret-copy" title="Copy the Secret to Clipboard">
                             <i class="fa fa-copy"></i>
                         </button>
                     </div>

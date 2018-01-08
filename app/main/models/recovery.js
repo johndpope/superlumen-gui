@@ -1,7 +1,7 @@
 const Security = require('../util/security.js');
 const Account = require('./account.js');
 
-module.exports = class Recovery {
+module.exports = class RecoveryModel {
 
     constructor() {
 
@@ -105,3 +105,9 @@ module.exports = class Recovery {
     }
 
 }
+
+/**
+ * The minimum number of questions and answers required to retain a recovery record.
+ * @type {Number}
+ */
+module.exports.MinQuestionsAnswers = 5;

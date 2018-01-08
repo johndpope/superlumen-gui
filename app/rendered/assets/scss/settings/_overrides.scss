@@ -33,6 +33,19 @@ textarea {
     }
 }
 
+select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+
+    .input-group & {
+        margin-bottom: 0;
+    }
+
+    &::-ms-expand {
+        display: none;
+    }
+}
+
 .switch {
     font-weight: normal;
 

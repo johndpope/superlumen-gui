@@ -1,7 +1,7 @@
 const path = require('path');
 const url = require('url');
 const electron = require('electron');
-const Config = require('../data/config.js');
+const Config = require('../models/config.js');
 const Window = require('./window.js');
 
 module.exports = class AboutWindow extends Window {
@@ -11,7 +11,7 @@ module.exports = class AboutWindow extends Window {
             height: 390,
             fullscreenable: false,
             modal: true,
-            parent: parent.windowRef,
+            parent: parent,
             maximizable: false,
             minimizable: false,
             resizable: false,

@@ -3,19 +3,22 @@ const url = require('url');
 const crypto = require('crypto');
 const fs = require('fs');
 const electron = require('electron');
-const Config = require('../data/config.js');
-const Wallet = require('../data/wallet.js');
-const WireManager = require('../wire/wire-manager.js');
-const Window = require('./window.js');
 const Comm = require('../util/comm.js');
+const WireManager = require('../wire/wire-manager.js');
+//windows
+const Window = require('./window.js');
 const AboutWindow = require('./about-window.js');
 const RecoveryQuestionsWindow = require('./recovery-questions-window.js');
+//models
+const Config = require('../models/config.js');
+const WalletModel = require('../models/wallet.js');
 
 module.exports = class MainWindow extends Window {
     constructor() {
         super({
             width: 760,
             height: 460,
+            minWidth: 760,
             fullscreenable: false,
             show: false,
             backgroundColor: '#E7E7E7',
@@ -31,7 +34,7 @@ module.exports = class MainWindow extends Window {
         this.wire = null;
 
         /**
-         * @type {Wallet}
+         * @type {WalletModel}
          */
         this.wallet = null;
 
@@ -47,7 +50,8 @@ module.exports = class MainWindow extends Window {
         Comm.listen(this, 'MainWindow.showAbout', this.showAbout);
         Comm.listen(this, 'MainWindow.showRecoveryQuestions', this.showRecoveryQuestions);
         Comm.listen(this, 'MainWindow.loadTemplate', this.loadTemplate);
-        Comm.listen(this, 'MainWindow.wire', this.onWire);
+        Comm.listen(this, 'MainWindow.clipboard', this.clipboard);
+        Comm.listen(this, 'Wire', this.onWire);
         //load the main template
         if (Config.lastFile) {
             this.loadTemplate('wallet-open');
@@ -58,39 +62,33 @@ module.exports = class MainWindow extends Window {
 
     loadTemplate(msg) {
         super.loadTemplate(msg.arg ? msg.arg : msg);
+        return Comm.respond(msg, true);
     }
 
     onWire(msg) {
-        if (msg.arg && msg.arg.path && this.wallet && this.wire) {
-            let comps = msg.arg.path.split('.');
-            if (comps && comps.length) {
-                let index = 0;
-                let w = this.wire;
-                while (index < comps.length - 1) {
-                    w = w[comps[index]];
-                    index++;
-                }
-                let f = w[comps[index]];
-                if (typeof w === 'object' && typeof f === 'function') {
-                    let fargs = [];
-                    if (typeof msg.arg.args !== 'undefined') {
-                        if (Array.isArray(msg.arg.args)) {
-                            fargs = msg.arg.args;
-                        } else {
-                            fargs = [msg.arg.args];
-                        }
+        this.wire.route(msg);
+    }
+
+    clipboard(msg) {
+        if (msg.arg) {
+            if (msg.arg.data, msg.arg.type) {
+                let cb = {};
+                cb[msg.arg.type] = msg.arg.data
+                electron.clipboard.write(cb);
+                if (msg.arg.title && msg.arg.message) {
+                    if (electron.Notification.isSupported()) {
+                        let n = new electron.Notification({
+                            title: msg.arg.title,
+                            body: msg.arg.message
+                        });
+                        n.show();
                     }
-                    //all wire calls should have a callback as the last argument and handle optional arguments before.
-                    fargs.push(function (data) {
-                        Comm.respond(msg, data); //send the resulting data from the wire call
-                    });
-                    //make the wire call
-                    let data = f.apply(w, fargs);
-                } else {
-                    throw new Error('Wire chain failed to produce an object and function.');
                 }
             }
+        } else {
+            electron.clipboard.clear();
         }
+        return Comm.respond(msg, true);
     }
 
     openWallet(msg) {
@@ -169,13 +167,13 @@ module.exports = class MainWindow extends Window {
 
     showAbout(msg) {
         let self = msg && msg.window ? msg.window : this;
-        var popup = new AboutWindow(self);
+        var win = new AboutWindow(self);
         //don't respond or callback until the dialog is closed.
         win.windowRef.on('close', function () {
             let rr = self.wallet.recovery;
             Comm.respond(msg, true);
         });
-        popup.show();
+        win.show();
         return true;
     }
 
@@ -195,10 +193,10 @@ module.exports = class MainWindow extends Window {
 
     /**
      * Removes the old wallet instance and replaces it with the new one, setting up wires as needed.
-     * @param {Wallet} wallet 
+     * @param {WalletModel} wallet 
      */
     setWallet(wallet) {
-        this.wallet = (wallet ? wallet : new Wallet());
+        this.wallet = (wallet ? wallet : new WalletModel());
         //add wires
         this.wire = new WireManager(this.wallet);
         //return the newly applied wallet

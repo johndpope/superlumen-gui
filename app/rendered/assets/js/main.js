@@ -24,6 +24,33 @@ class Randomization {
 }
 
 /**
+ * Utility class that helps facilitate communication between the Electron main process and the rendered content.
+ */
+class Comm {
+
+    /**
+     * Sends a communication to the Electron main process. If a callback function is provided, the function call is
+     * made asynchronously, awaiting a response on the same channel.
+     * @param {String} channel 
+     * @param {*} arg 
+     * @param {Function} [callback]
+     */
+    static send(channel, arg, callback) {
+        if (window.ipc) {
+            if (callback) {
+                window.ipc.send(channel, arg);
+                window.ipc.once(channel, callback);
+            } else {
+                return window.ipc.sendSync(channel, arg);
+            }
+        } else {
+            throw new Error('IPC not set - did the preload script run?');
+        }
+    }
+
+}
+
+/**
  * This is an abstract (non-initializable) class definition to be extended by an implementing view model class.
  * @class
  */
@@ -45,13 +72,18 @@ class ViewModel {
         this.parent = null;
         this.children = [];
         this.element = null;
+        this.config = null;
         //setup events and listeners
         if (window && window.document) {
             //fire render when the DOM is ready
             var self = this;
             document.addEventListener("DOMContentLoaded", function () {
                 var classes = document.getElementsByTagName('body')[0].classList.add('view-ready');
-                self.render();
+                //get the configuration
+                Comm.send('Wire', { path: 'config.read' }, function (e, arg) {
+                    self.config = arg.model;
+                    self.render();
+                });
             });
         }
     }
@@ -200,47 +232,12 @@ class AboutViewModel extends ViewModel {
         return new AboutViewModel();
     }
 
-    render() { }
-
-}
-
-
-class TacowModel extends ViewModel {
-    constructor() {
-        super();
+    render() {
+        $('.button-close').click(this, this.onCloseClick);
     }
 
-    static init() {
-        return new AboutViewModel();
-    }
-
-    render() { }
-
-}
-
-/**
- * Utility class that helps facilitate communication between the Electron main process and the rendered content.
- */
-class Comm {
-
-    /**
-     * Sends a communication to the Electron main process. If a callback function is provided, the function call is
-     * made asynchronously, awaiting a response on the same channel.
-     * @param {String} channel 
-     * @param {*} arg 
-     * @param {Function} [callback]
-     */
-    static send(channel, arg, callback) {
-        if (window.ipc) {
-            if (callback) {
-                window.ipc.send(channel, arg);
-                window.ipc.once(channel, callback);
-            } else {
-                return window.ipc.sendSync(channel, arg);
-            }
-        } else {
-            throw new Error('IPC not set - did the preload script run?');
-        }
+    onCloseClick(e) {
+        window.close();
     }
 
 }
@@ -339,11 +336,11 @@ class RecoveryQuestionsViewModel extends ViewModel {
     render() {
         let self = this;
         //add a q/a
-        Comm.send('RecoveryQuestionsWindow.readRecovery', null, function(e, arg) {
-            if (arg && arg.questions && arg.questions.length) {
-                for (let x = 0; x < arg.questions.length; x++) {
-                    let q = arg.questions[x];
-                    let a = arg.answers[x];
+        Comm.send('Wire', { path: 'recovery.read' }, function (e, arg) {
+            if (arg && arg.model && arg.model.questions && arg.model.questions.length) {
+                for (let x = 0; x < arg.model.questions.length; x++) {
+                    let q = arg.model.questions[x];
+                    let a = arg.model.answers[x];
                     let tr = self.addQARow(false, false);
                     tr.find('.question').val(q);
                     tr.find('.answer').val(a);
@@ -413,9 +410,13 @@ class RecoveryQuestionsViewModel extends ViewModel {
             alert(`Your total answer strength is too weak. Recovery records must have at least medium strength protection.`);
             return;
         }
-        Comm.send('RecoveryQuestionsWindow.setRecovery', self.model, function (e, arg) {
+        Comm.send('Wire', { path: 'recovery.save', args: [self.model] }, function (e, arg) {
             if (arg) {
-                window.close();
+                if (arg.errors.length) {
+                    alert('Failed to save the recovery record:\n' + arg.errors.join('\n'));
+                } else {
+                    window.close();
+                }
             } else {
                 alert('Unable to save recovery record settings due to the wallet being locked or unavailable.');
             }
@@ -644,7 +645,7 @@ class WalletCreateViewModel extends ViewModel {
 
     render() {
         $('input:visible:first').focus().select();
-        //this.parent.changeLogoRotationSpeed(280);
+        //open wallet link
         $('#link-open-wallet').click(this, this.onOpenWalletClick);
         //password section
         $('.wizard-step-password input[name="text-password"]').change(this, this.onPasswordChange);
@@ -660,6 +661,19 @@ class WalletCreateViewModel extends ViewModel {
         $('.wizard-step-recovery .button-setup-recovery').click(this, this.onConfigureRecovery);
         //accounts
         $('.wizard-step-accounts .button-new-account').click(this, this.onNewAccount);
+        $('.wizard-step-accounts .button-account-id-copy').click(this, this.onAccountIDCopy);
+        $('.wizard-step-accounts .button-account-secret-copy').click(this, this.onAccountSecretCopy);
+        //populate networks
+        if (this.config && this.config.networks) {
+            for (let x = 0; x < this.config.networks.length; x++) {
+                let nw = this.config.networks[x];
+                let opt = $(`<option value="${nw.url}">${nw.label}</option>`).prop('selected', !!nw.default);
+                let select = $('.wizard-step-accounts #select-account-network');
+                opt.appendTo(select);
+            }
+        }
+        //generate a new address
+        this.onNewAccount();
         //bind the wizard component
         new Wizard($('.wizard')).bind();
     }
@@ -679,7 +693,7 @@ class WalletCreateViewModel extends ViewModel {
         let pw = $('input[name="text-password"]').val();
         if (pw) {
             let strength = Security.strength(pw);
-            $('.wizard-step-password .progress').show().removeClass('alert warning primary');
+            $('.wizard-step-password .progress').removeClass('alert warning primary');
             if (strength.rank <= Security.StrengthWeak) {
                 $('.progress').addClass('alert');
             } else if (strength.rank <= Security.StrengthMedium) {
@@ -692,7 +706,6 @@ class WalletCreateViewModel extends ViewModel {
                 .css('width', (strength.rank * 100) + '%');
             $('.wizard-step-password .progress .progress-meter-text').text(strength.label);
         } else {
-            $('.wizard-step-password .progress').hide();
             $('.wizard-step-password .progress .progress-meter').data('strength', 0);
         }
         self.onPasswordConfirmChange(e);
@@ -789,11 +802,20 @@ class WalletCreateViewModel extends ViewModel {
     }
 
     onNewAccount(e) {
-        let self = e.data;
-        Comm.send('MainWindow.wire', { path: 'accounts.create' }, function (e, arg) {
-            $('.wizard-step-accounts .text-account-id').val(arg.publicKey);
-            $('.wizard-step-accounts .text-account-secret').val(arg.privateKey);
+        Comm.send('Wire', { path: 'accounts.gen' }, function (ev, arg) {
+            $('.wizard-step-accounts .text-account-id').val(arg.model.publicKey);
+            $('.wizard-step-accounts .text-account-secret').val(arg.model.privateKey);
         });
+    }
+
+    onAccountIDCopy(e) {
+        let text = $('.wizard-step-accounts .text-account-id').val();
+        Comm.send('MainWindow.clipboard', { data: text, type: 'text', title: 'Superlumen: Clipboard', message: 'Secret copied to clipboard.' });
+    }
+
+    onAccountSecretCopy(e) {
+        let text = $('.wizard-step-accounts .text-account-secret').val();
+        Comm.send('MainWindow.clipboard', { data: text, type: 'text', title: 'Superlumen: Clipboard', message: 'Secret copied to clipboard.' });
     }
 
 }
@@ -822,8 +844,6 @@ if (window.location) {
         }
     }
 }
-
-exports.TacowModel = TacowModel;
 
 return exports;
 

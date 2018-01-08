@@ -1,7 +1,7 @@
 const path = require('path');
 const url = require('url');
 const electron = require('electron');
-const Config = require('../data/config.js');
+const Config = require('../models/config.js');
 
 module.exports = class Window {
     /**
@@ -11,7 +11,25 @@ module.exports = class Window {
         if (!config) {
             throw new Error('Argument "config" must be provided.');
         }
-        config.window = this;
+        //modify config
+        let slWindowParent = null;
+        config.window = this; //save the reference to the superlumen window.
+        if (config.parent) {
+            if (config.parent instanceof Window) {
+                //parent is a superlumen window, so update config to use the electron browser window
+                slWindowParent = config.parent;
+                config.parent = slWindowParent.windowRef;
+            } else if (config.parent instanceof electron.BrowserWindow) {
+                //parent is an electron window, so look for a superlumen window ref in the config.
+                if (config.parent &&
+                    config.parent.webContents &&
+                    config.parent.webContents.browserWindowOptions) {
+                    slWindowParent = config.parent.webContents.browserWindowOptions.window
+                }
+            }
+        }
+
+
 
         /**
          * The Electron BrowserWindow object instance.
@@ -23,7 +41,7 @@ module.exports = class Window {
          * The parent window.
          * @type {Window}
          */
-        this.parent = config.parent ? config.parent.webContents.browserWindowOptions.window : null;
+        this.parent = slWindowParent;
 
         /**
          * The currently loaded template information. This will be populated when a template is loaded via the 

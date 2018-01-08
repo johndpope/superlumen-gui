@@ -20,11 +20,11 @@ export default class RecoveryQuestionsViewModel extends ViewModel {
     render() {
         let self = this;
         //add a q/a
-        Comm.send('RecoveryQuestionsWindow.readRecovery', null, function(e, arg) {
-            if (arg && arg.questions && arg.questions.length) {
-                for (let x = 0; x < arg.questions.length; x++) {
-                    let q = arg.questions[x];
-                    let a = arg.answers[x];
+        Comm.send('Wire', { path: 'recovery.read' }, function (e, arg) {
+            if (arg && arg.model && arg.model.questions && arg.model.questions.length) {
+                for (let x = 0; x < arg.model.questions.length; x++) {
+                    let q = arg.model.questions[x];
+                    let a = arg.model.answers[x];
                     let tr = self.addQARow(false, false);
                     tr.find('.question').val(q);
                     tr.find('.answer').val(a);
@@ -94,9 +94,13 @@ export default class RecoveryQuestionsViewModel extends ViewModel {
             alert(`Your total answer strength is too weak. Recovery records must have at least medium strength protection.`);
             return;
         }
-        Comm.send('RecoveryQuestionsWindow.setRecovery', self.model, function (e, arg) {
+        Comm.send('Wire', { path: 'recovery.save', args: [self.model] }, function (e, arg) {
             if (arg) {
-                window.close();
+                if (arg.errors.length) {
+                    alert('Failed to save the recovery record:\n' + arg.errors.join('\n'));
+                } else {
+                    window.close();
+                }
             } else {
                 alert('Unable to save recovery record settings due to the wallet being locked or unavailable.');
             }

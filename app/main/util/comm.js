@@ -9,7 +9,7 @@ module.exports = class Comm {
 
     /**
      * The IPC message object which can also be replaced with a simple callback function.
-     * @typedef {Object} CommMessage
+     * @typedef {Object} Comm~CommMessage
      * @property {String} channel
      * @property {Object} e
      * @property {*} arg
@@ -43,7 +43,7 @@ module.exports = class Comm {
 
     /**
      * Provides a clean way to respond to an ipc message or a callback, whichever is passed.
-     * @param {CommMessage} msg - The comm message details.
+     * @param {Comm~CommMessage} msg - The comm message details.
      * @param {*} data - The data sent to the callback and sender via IPC.
      * @returns {*} Returns the data object passed.
      */

@@ -1,4 +1,5 @@
 import Randomization from '../util/randomization.js';
+import Comm from '../util/comm.js';
 
 /**
  * This is an abstract (non-initializable) class definition to be extended by an implementing view model class.
@@ -22,13 +23,18 @@ export default class ViewModel {
         this.parent = null;
         this.children = [];
         this.element = null;
+        this.config = null;
         //setup events and listeners
         if (window && window.document) {
             //fire render when the DOM is ready
             var self = this;
             document.addEventListener("DOMContentLoaded", function () {
                 var classes = document.getElementsByTagName('body')[0].classList.add('view-ready');
-                self.render();
+                //get the configuration
+                Comm.send('Wire', { path: 'config.read' }, function (e, arg) {
+                    self.config = arg.model;
+                    self.render();
+                });
             });
         }
     }

@@ -17,7 +17,7 @@ export default class WalletCreateViewModel extends ViewModel {
 
     render() {
         $('input:visible:first').focus().select();
-        //this.parent.changeLogoRotationSpeed(280);
+        //open wallet link
         $('#link-open-wallet').click(this, this.onOpenWalletClick);
         //password section
         $('.wizard-step-password input[name="text-password"]').change(this, this.onPasswordChange);
@@ -33,6 +33,19 @@ export default class WalletCreateViewModel extends ViewModel {
         $('.wizard-step-recovery .button-setup-recovery').click(this, this.onConfigureRecovery);
         //accounts
         $('.wizard-step-accounts .button-new-account').click(this, this.onNewAccount);
+        $('.wizard-step-accounts .button-account-id-copy').click(this, this.onAccountIDCopy);
+        $('.wizard-step-accounts .button-account-secret-copy').click(this, this.onAccountSecretCopy);
+        //populate networks
+        if (this.config && this.config.networks) {
+            for (let x = 0; x < this.config.networks.length; x++) {
+                let nw = this.config.networks[x];
+                let opt = $(`<option value="${nw.url}">${nw.label}</option>`).prop('selected', !!nw.default);
+                let select = $('.wizard-step-accounts #select-account-network');
+                opt.appendTo(select);
+            }
+        }
+        //generate a new address
+        this.onNewAccount();
         //bind the wizard component
         new Wizard($('.wizard')).bind();
     }
@@ -52,7 +65,7 @@ export default class WalletCreateViewModel extends ViewModel {
         let pw = $('input[name="text-password"]').val();
         if (pw) {
             let strength = Security.strength(pw);
-            $('.wizard-step-password .progress').show().removeClass('alert warning primary');
+            $('.wizard-step-password .progress').removeClass('alert warning primary');
             let text = '';
             if (strength.rank <= Security.StrengthWeak) {
                 $('.progress').addClass('alert');
@@ -66,7 +79,6 @@ export default class WalletCreateViewModel extends ViewModel {
                 .css('width', (strength.rank * 100) + '%');
             $('.wizard-step-password .progress .progress-meter-text').text(strength.label);
         } else {
-            $('.wizard-step-password .progress').hide();
             $('.wizard-step-password .progress .progress-meter').data('strength', 0);
         }
         self.onPasswordConfirmChange(e);
@@ -163,11 +175,20 @@ export default class WalletCreateViewModel extends ViewModel {
     }
 
     onNewAccount(e) {
-        let self = e.data;
-        Comm.send('MainWindow.wire', { path: 'accounts.create' }, function (e, arg) {
-            $('.wizard-step-accounts .text-account-id').val(arg.publicKey);
-            $('.wizard-step-accounts .text-account-secret').val(arg.privateKey);
+        Comm.send('Wire', { path: 'accounts.gen' }, function (ev, arg) {
+            $('.wizard-step-accounts .text-account-id').val(arg.model.publicKey);
+            $('.wizard-step-accounts .text-account-secret').val(arg.model.privateKey);
         });
+    }
+
+    onAccountIDCopy(e) {
+        let text = $('.wizard-step-accounts .text-account-id').val();
+        Comm.send('MainWindow.clipboard', { data: text, type: 'text', title: 'Superlumen: Clipboard', message: 'Account ID copied to clipboard.' });
+    }
+
+    onAccountSecretCopy(e) {
+        let text = $('.wizard-step-accounts .text-account-secret').val();
+        Comm.send('MainWindow.clipboard', { data: text, type: 'text', title: 'Superlumen: Clipboard', message: 'Secret copied to clipboard.' });
     }
 
 }

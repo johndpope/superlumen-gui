@@ -4739,13 +4739,13 @@ select {
   appearance: none;
   border: 1px solid #98cfec;
   border-radius: 0;
-  background-color: rgba(37, 142, 198, 0.8);
+  background-color: rgba(37, 142, 198, 0.2);
   font-family: inherit;
   font-size: 1rem;
   font-weight: normal;
   line-height: 1.5;
   color: #258ec6;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='32' height='24' viewBox='0 0 32 24'><polygon points='0,0 32,0 16,24' style='fill: rgb%28254, 254, 254%29'></polygon></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='32' height='24' viewBox='0 0 32 24'><polygon points='0,0 32,0 16,24' style='fill: rgb%2863, 63, 63%29'></polygon></svg>");
   background-origin: content-box;
   background-position: right -1.25rem center;
   background-repeat: no-repeat;
@@ -4754,7 +4754,7 @@ select {
   transition: box-shadow 0.5s, border-color 0.25s ease-in-out; }
   @media screen and (min-width: 0\0) {
     select {
-      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAYCAYAAACbU/80AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMBJREFUeNrEllsOhCAMRVszC9IlzU7KCmVHTJsoMWYMUtpyv9BgbuXQB5ZSdgBYYY4ycgBivk8KYFsQMfMiTTBP4o3nUzCKzOabLJbLy2/g31evGkAginR4/ZegKH5qX3bJCscA3t0x3kgO5tQFyhhFf50xRqFLbyMUNJQzgyjGS/wgCpvKqkRBpuWrE4V9d+1E4dPUXqIg107SQOE/2DRQxMwTDygIInVDET9T3lCoj/6j/VCmGjZOl2lKpZ8AAwDQP7zIimDGFQAAAABJRU5ErkJggg=="); } }
+      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAYCAYAAACbU/80AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIpJREFUeNrEkckNgDAMBBfRkEt0ObRBBdsGXUDgmQfK4XhH2m8czQAAy27R3tsw4Qfe2x8uOO6oYLb6GlOor3GF+swURAOmUJ+RwtEJs9WvTGEYxBXqI1MQAZhCfUQKRzDMVj+TwrAIV6jvSUEkYAr1LSkcyTBb/V+KYfX7xAeusq3sLDtGH3kEGACPWIflNZfhRQAAAABJRU5ErkJggg=="); } }
   select:focus {
     outline: none;
     border: 1px solid #258ec6;
@@ -7595,6 +7595,14 @@ textarea[readonly],
 textarea:read-only {
   cursor: text; }
 
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none; }
+  .input-group select {
+    margin-bottom: 0; }
+  select::-ms-expand {
+    display: none; }
+
 .switch {
   font-weight: normal; }
   .switch label {
@@ -7703,8 +7711,6 @@ body#wallet-create {
   body#wallet-create .grid-container {
     position: relative;
     z-index: 0; }
-  body#wallet-create .wizard .wizard-step-password .progress {
-    display: none; }
 .view-wallet-open {
   padding: 2rem 4rem 0 4rem; }
   .view-wallet-open .grid-container {

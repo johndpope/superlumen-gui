@@ -2,7 +2,7 @@ const path = require('path');
 const url = require('url');
 const electron = require('electron');
 const nunjucks = require('electron-nunjucks');
-const Config = require('./data/config.js');
+const Config = require('./models/config.js');
 const MainWindow = require('./windows/main-window.js');
 
 let Superlumen = module.exports = {

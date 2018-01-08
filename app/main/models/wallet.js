@@ -1,19 +1,21 @@
 const fs = require('fs');
 const crypto = require('crypto');
+const RecoveryModel = require('./recovery.js');
+const AccountModel = require('./account.js');
 
-module.exports = class Wallet {
+module.exports = class WalletModel {
     constructor() {
 
         /**
          * Holds the Account objects. When locked, the entire array is encrypted using the wallet  password and 
          * key-file as a string. When unlocked, this field is an array of Accounts.
-         * @type {String|Array.<Account>}
+         * @type {String|Array.<AccountModel>}
          */
         this.accounts = [];
 
         /**
          * If a recovery record is present, it is stored in this field.
-         * @type {Recovery}
+         * @type {RecoveryModel}
          */
         this.recovery = null;
 

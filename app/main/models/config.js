@@ -1,7 +1,15 @@
 const process = require('process');
 const path = require('path');
 
+/**
+ * @typedef Config~Network
+ * @property {String} label
+ * @property {String} url
+ */
 
+ /**
+  * @static
+  */
 module.exports = {
 
     /**
@@ -24,9 +32,18 @@ module.exports = {
     lastFile: null,
 
     /**
+     * The list of networks that may be selected for new accounts.
+     * @type {Array.<Config~Network>}
+     */
+    networks: [
+        { label: 'Live', url: 'https://horizon.stellar.org' },
+        { label: 'Test', url: 'https://horizon-testnet.stellar.org', default: true }
+    ],
+
+    /**
      * The theme applied.
      * @type {String} 
      */
     theme: 'dark'
-    
+
 }
