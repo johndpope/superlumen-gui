@@ -25,6 +25,7 @@ export default class Wizard extends Component {
         //handle "ENTER" clicks
         this.container.find('>.wizard-step').find('input,select,textarea').keypress(this, this.onEnter);
         $('body').keypress(this, this.onEnter);
+        return this;
     }
 
     onEnter(e) {

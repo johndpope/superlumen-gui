@@ -25,7 +25,7 @@ module.exports = class AccountWire extends Wire {
      */
     gen(callback) {
         let kp = Stellar.Keypair.random();
-        let defNetwork = Config.networks.find((n)=>{
+        let defNetwork = Config.networks.find((n) => {
             return !!n.default;
         });
         if (!defNetwork) {
@@ -36,6 +36,39 @@ module.exports = class AccountWire extends Wire {
             callback({ op: 'gen', model: account, found: false });
         }
         return account;
+    }
+
+    /**
+     * Checks if the given accountID and secret appear to be valid Stellar keys.
+     * @param {String} accountID 
+     * @param {String} secret 
+     * @param {Wire~callback} [callback]
+     * @returns {Boolean}
+     */
+    verify(accountID, secret, callback) {
+        let errors = [];
+        if (!accountID) {
+            errors.push('The "accountID" argument is required.');
+        } else if (!secret) {
+            errors.push('The "secret" argument is required.');
+        }
+        if (!callback && errors.length) { //no callback, do a standard error throw
+            throw new Error(errors.join(';\n'));
+        }
+        if (!errors.length) {
+            try {
+                let kp = Stellar.Keypair.fromSecret(secret);
+                if (kp.publicKey() !== accountID) {
+                    errors.push('There is a mismatch between the Account ID and the secret.');
+                }
+            } catch (err) {
+                errors.push(err);
+            }
+        }
+        if (callback) {
+            callback({ op: 'verify', model: !errors.length, found: true, errors: errors });
+        }
+        return false;
     }
 
     /**
@@ -50,12 +83,6 @@ module.exports = class AccountWire extends Wire {
         //run validations
         if (!account) {
             errors.push('The "account" argument is required.');
-        } else if (account instanceof AccountModel == false) {
-            errors.push('The "account" argument must be a model type Account.');
-        } else if (this.wallet.unlocked === false) {
-            errors.push('The wallet is locked and cannot be updated.');
-        } else if (this.wallet.recovery && this.wallet.recovery.unlocked === false) {
-            errors.push('The wallet recovery model is locked and cannot be updated.');
         } else if (!account.label) {
             errors.push('The "account.label" argument is required.');
         } else if (!account.network) {
@@ -81,7 +108,7 @@ module.exports = class AccountWire extends Wire {
                 found = true;
                 existing.updateFrom(account);
             } else { //add
-                this.wallet.accounts.push(account);
+                this.wallet.accounts.push(new AccountModel(account.label, account.network, account.publicKey, account.privateKey));
             }
             //update wallet recovery
             if (this.wallet.recovery) {
@@ -91,7 +118,7 @@ module.exports = class AccountWire extends Wire {
                 if (existing) { //update
                     existing.updateFrom(account);
                 } else { //add
-                    this.wallet.recovery.accounts.push(account);
+                    this.wallet.recovery.accounts.push(new AccountModel(account.label, account.network, account.publicKey, account.privateKey));
                 }
             }
         }
@@ -112,8 +139,6 @@ module.exports = class AccountWire extends Wire {
         let models = null;
         if (publicKey && (typeof publicKey !== 'string' || (!callback && typeof publicKey !== 'function'))) {
             errors.push('The "publicKey" argument, if provided with a callback, must be a string.');
-        } else if (this.wallet.unlocked === false) {
-            errors.push('The wallet is locked and cannot be read.');
         }
         if (!callback && errors.length) { //no callback, do a standard error throw
             throw new Error(errors.join(';\n'));
@@ -151,10 +176,6 @@ module.exports = class AccountWire extends Wire {
             errors.push('The "account" argument is required.');
         } else if (typeof account !== 'string' && account instanceof AccountModel == false) {
             errors.push('The "account" argument must be a model type Account or the public key string.');
-        } else if (this.wallet.unlocked === false) {
-            errors.push('The wallet is locked and cannot be updated.');
-        } else if (this.wallet.recovery && this.wallet.recovery.unlocked === false) {
-            errors.push('The wallet recovery model is locked and cannot be updated.');
         }
         if (!callback && errors.length) { //no callback, do a standard error throw
             throw new Error(errors.join(';\n'));

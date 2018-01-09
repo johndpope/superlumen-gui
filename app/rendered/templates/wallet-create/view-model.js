@@ -1,14 +1,11 @@
 import Comm from '../../util/comm.js'
 import ViewModel from '../view-model.js';
-import Model from './model.js';
 import Wizard from '../../components/wizard/wizard.js';
 import Security from '../../util/security.js';
 
 export default class WalletCreateViewModel extends ViewModel {
     constructor() {
         super();
-
-        this.model = new Model();
     }
 
     static init() {
@@ -32,9 +29,11 @@ export default class WalletCreateViewModel extends ViewModel {
         $('.wizard-step-recovery input[type="checkbox"]').change(this, this.onRecoveryChecked);
         $('.wizard-step-recovery .button-setup-recovery').click(this, this.onConfigureRecovery);
         //accounts
-        $('.wizard-step-accounts .button-new-account').click(this, this.onNewAccount);
+        $('.wizard-step-accounts input[type="checkbox"]').change(this, this.onNewAccountChecked);
+        $('.wizard-step-accounts .button-refresh-account').click(this, this.onRefreshAccountClick);
         $('.wizard-step-accounts .button-account-id-copy').click(this, this.onAccountIDCopy);
         $('.wizard-step-accounts .button-account-secret-copy').click(this, this.onAccountSecretCopy);
+        $('.wizard-step-accounts .button-complete').click(this, this.onCompleteClick);
         //populate networks
         if (this.config && this.config.networks) {
             for (let x = 0; x < this.config.networks.length; x++) {
@@ -45,9 +44,9 @@ export default class WalletCreateViewModel extends ViewModel {
             }
         }
         //generate a new address
-        this.onNewAccount();
+        this.onRefreshAccountClick();
         //bind the wizard component
-        new Wizard($('.wizard')).bind();
+        this.wizard = new Wizard($('.wizard')).bind();
     }
 
     onOpenWalletClick(e) {
@@ -148,6 +147,9 @@ export default class WalletCreateViewModel extends ViewModel {
     }
 
     onPasswordNextClick(e) {
+        let self = e.data;
+        let pw = $('.wizard-step-password input[name="text-password"]').val();
+        let kf = $('.wizard-step-password .button-key-file').data('file-name');
         let strength = $('.wizard-step-password .progress .progress-meter').data('strength');
         if (strength < Security.StrengthWeak) {
             if (!confirm('Your password is weak, are you sure you want to continue?')) {
@@ -156,6 +158,19 @@ export default class WalletCreateViewModel extends ViewModel {
                 return false;
             }
         }
+        Comm.send('Wire', {
+            path: 'wallet.save', args: [{
+                label: 'My Wallet',
+                password: pw,
+                keyFilePath: kf
+            }]
+        }, function (e, arg) {
+            if (arg && arg.errors && arg.errors.length) {
+                console.error(arg.errors);
+                alert('Unable to set password and/or key file:\n' + arg.errors.join(';\n'));
+                self.wizard.back();
+            }
+        });
     }
 
     onRecoveryChecked(e) {
@@ -174,7 +189,20 @@ export default class WalletCreateViewModel extends ViewModel {
         });
     }
 
-    onNewAccount(e) {
+    onNewAccountChecked(e) {
+        let self = e.data;
+        let newAccount = $('.wizard-step-accounts input[type="checkbox"]').is(':checked');
+        $('.wizard-step-accounts .text-account-id').prop('readonly', newAccount).val('');
+        $('.wizard-step-accounts .text-account-secret').prop('readonly', newAccount).val('');
+        if (newAccount) {
+            self.onRefreshAccountClick();
+            $('.wizard-step-accounts .button-refresh-account').show();
+        } else {
+            $('.wizard-step-accounts .button-refresh-account').hide();
+        }
+    }
+
+    onRefreshAccountClick(e) {
         Comm.send('Wire', { path: 'accounts.gen' }, function (ev, arg) {
             $('.wizard-step-accounts .text-account-id').val(arg.model.publicKey);
             $('.wizard-step-accounts .text-account-secret').val(arg.model.privateKey);
@@ -189,6 +217,32 @@ export default class WalletCreateViewModel extends ViewModel {
     onAccountSecretCopy(e) {
         let text = $('.wizard-step-accounts .text-account-secret').val();
         Comm.send('MainWindow.clipboard', { data: text, type: 'text', title: 'Superlumen: Clipboard', message: 'Secret copied to clipboard.' });
+    }
+
+    onCompleteClick(e) {
+        let self = e.data;
+        let accountID = $('.wizard-step-accounts .text-account-id').val().trim();
+        let secret = $('.wizard-step-accounts .text-account-secret').val().trim();
+        let networkElement = $('.select-account-network option:selected');
+        let network = {
+            label: networkElement.text(),
+            url: networkElement.val()
+        };
+        Comm.send('Wire', { path: 'accounts.verify', args: [accountID, secret] }, function (ev, arg) {
+            if (arg.model) {
+                Comm.send('Wire', { path: 'accounts.save', args: [{
+                    label: 'My Account',
+                    publicKey: accountID,
+                    privateKey: secret,
+                    network: network
+                }] }, function (ev2, arg2) {
+                    alert('save!');
+                });
+            } else {
+                alert('The Account ID or Secret is not valid.')
+                $('.wizard-step-accounts .text-account-id').focus().select();
+            }
+        });
     }
 
 }

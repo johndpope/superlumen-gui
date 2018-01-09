@@ -121,11 +121,11 @@ module.exports = class MainWindow extends Window {
             let valid = true;
             //check file size.
             let stats = fs.statSync(fileName);
-            if (stats.size > Wallet.MaxKeyFileSize) {
-                electron.dialog.showErrorBox('Invalid Size', `The file selected is too large (${Math.round(stats.size / 1024)}KB). The maximum is ${Wallet.MaxKeyFileSize / 1024}KB.`);
+            if (stats.size > WalletModel.MaxKeyFileSize) {
+                electron.dialog.showErrorBox('Invalid Size', `The file selected is too large (${Math.round(stats.size / 1024)}KB). The maximum is ${WalletModel.MaxKeyFileSize / 1024}KB.`);
                 valid = false;
-            } else if (stats.size < Wallet.MinKeyFileSize) {
-                electron.dialog.showErrorBox('Invalid Size', `The file selected is too small (${Math.round(stats.size)} Bytes). The minimum is ${Wallet.MinKeyFileSize} Bytes.`);
+            } else if (stats.size < WalletModel.MinKeyFileSize) {
+                electron.dialog.showErrorBox('Invalid Size', `The file selected is too small (${Math.round(stats.size)} Bytes). The minimum is ${WalletModel.MinKeyFileSize} Bytes.`);
                 valid = false;
             }
             Comm.respond(msg, {

@@ -4,14 +4,19 @@ const Wire = require('./wire.js');
 const AccountWire = require('./account-wire.js');
 const ConfigWire = require('./config-wire.js');
 const RecoveryWire = require('./recovery-wire.js');
+const WalletWire = require('./wallet-wire.js');
 
-module.exports = class WireManager extends Wire {
+module.exports = class WireManager {
     /**
      * @constructor
      * @param {WalletModel} wallet 
      */
     constructor(wallet) {
-        super(wallet);
+
+        /**
+         * @type {WalletWire}
+         */
+        this.wallet = null;
 
         /**
          * @type {AccountWire}
@@ -42,11 +47,11 @@ module.exports = class WireManager extends Wire {
         } else if (!wallet instanceof WalletModel) {
             throw new Error('The "wallet" argument must be a Wallet type.');
         }
-        this.wallet = wallet;
         //add wires
         this.accounts = new AccountWire(wallet);
         this.config = new ConfigWire(wallet);
         this.recovery = new RecoveryWire(wallet);
+        this.wallet = new WalletWire(wallet);
         //all done
         return this;
     }

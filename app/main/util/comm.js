@@ -49,7 +49,7 @@ module.exports = class Comm {
      */
     static respond(msg, data) {
         if (!msg) {
-            return;
+            throw new Error('The "msg" argument is required.');
         }
         if (typeof msg === 'function') {
             msg();
@@ -60,6 +60,7 @@ module.exports = class Comm {
             if (typeof msg.callback === 'function') {
                 msg.callback(data);
             }
+            msg.e.returnValue = data;
         }
         return data;
     }

@@ -57,10 +57,6 @@ module.exports = class RecoveryWire extends Wire {
             errors.push('There must be an equal number of questions and answers in the recovery record.');
         } else if (recovery.answers.length < RecoveryModel.MinQuestionsAnswers) {
             errors.push(`The recovery record requires at least ${RecoveryModel.MinQuestionsAnswers} questions and answers.`);
-        } else if (this.wallet.unlocked === false) {
-            errors.push('The wallet is locked and cannot be updated.');
-        } else if (this.wallet.recovery && this.wallet.recovery.unlocked === false) {
-            errors.push('The wallet recovery model is locked and cannot be updated.');
         }
         if (!callback && errors.length) { //no callback, do a standard error throw
             throw new Error(errors.join(';\n'));
@@ -92,18 +88,14 @@ module.exports = class RecoveryWire extends Wire {
     /**
      * Returns the recovery QA (if any) on the wallet.
      * @param {Wire~callback} [callback]
-     * @returns {RecoveryModel}
+     * @returns {RecoveryWire~RecoveryQAModel}
      */
     read(callback) {
         let errors = [];
         let model = null;
         let found = false;
         //run validations
-        if (this.wallet.unlocked === false) {
-            errors.push('The wallet is locked and cannot be updated.');
-        } else if (this.wallet.recovery && this.wallet.recovery.unlocked === false) {
-            errors.push('The wallet recovery model is locked and cannot be updated.');
-        }
+        //NONE
         if (!callback && errors.length) { //no callback, do a standard error throw
             throw new Error(errors.join(';\n'));
         }
@@ -119,7 +111,7 @@ module.exports = class RecoveryWire extends Wire {
         if (callback) {
             callback({ op: 'read', model: model, found: found, errors: errors });
         }
-        return this.wallet;
+        return model;
     }
 
     /**
@@ -132,11 +124,7 @@ module.exports = class RecoveryWire extends Wire {
         let found = false;
         let model = null;
         //run validations
-        if (this.wallet.unlocked === false) {
-            errors.push('The wallet is locked and cannot be updated.');
-        } else if (this.wallet.recovery && this.wallet.recovery.unlocked === false) {
-            errors.push('The wallet recovery model is locked and cannot be updated.');
-        }
+        //NONE
         if (!callback && errors.length) { //no callback, do a standard error throw
             throw new Error(errors.join(';\n'));
         }

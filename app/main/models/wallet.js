@@ -2,6 +2,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const RecoveryModel = require('./recovery.js');
 const AccountModel = require('./account.js');
+const Key = require('./key.js');
 
 module.exports = class WalletModel {
     constructor() {
@@ -20,53 +21,37 @@ module.exports = class WalletModel {
         this.recovery = null;
 
         /**
-         * Holds the path of the wallet file when loaded and after saving.
+         * The key used to encrypt the wallet.
+         * @type {Key}
          */
-        this.walletFilePath = null;
+        this.key = null;
 
         /**
-         * Indicates whether the wallet has been unlocked or not.
-         * @type {Boolean}
+         * A custom label for the wallet (shown on the dashboard).
+         * @type {String}
          */
-        this.unlocked = true;
+        this.label = 'My Wallet';
+
+        /**
+         * The date the wallet instance was created.
+         * @type {Date}
+         */
+        this.dateCreated = new Date();
+
     }
 
     /**
-     * Load and decrypt a given wallet file.
-     * @param {String} password 
-     * @param {String} keyFilePath 
+     * Updates this wallet model with the information from another.
+     * @param {WalletModel} source 
      */
-    load(walletFilePath, password, keyFilePath) {
-        if (!walletFilePath) {
-            throw new Error('The wallet file path is not specified.');
-        } else if (!password) {
-            throw new Error('A wallet password is required.');
-        } else if (password instanceof SecureString === false) {
-            throw new Error('Bad implementation. The wallet password must be a SecureString.');
-        } else if (fs.existsSync(walletFilePath) === false) {
-            throw new Error('The wallet file path specified does not exist or is inaccessible.');
-        } else if (keyFilePath && fs.existsSync(keyFilePath) === false) {
-            throw new Error('The key file path specified does not exist or is inaccessible.');
+    updateFrom(source) {
+        if (!source) {
+            errors.push('The "source" argument is required.');
+        } else if (source instanceof WalletModel == false) {
+            errors.push('The "source" argument must be a model type Wallet.');
         }
-        this.walletFilePath = walletFilePath;
-        //TODO load
-    }
-
-    /**
-     * Saves the wallet.
-     */
-    save(filePath) {
-        if (!this.walletFilePath) {
-            throw new Error('The wallet file path is not specified.');
-        } else if (!password) {
-            throw new Error('A wallet password is required.');
-        } else if (password instanceof SecureString === false) {
-            throw new Error('Bad implementation. The wallet password must be a SecureString.');
-        } else if (keyFilePath && fs.existsSync(keyFilePath) === false) {
-            throw new Error('The key file path specified does not exist or is inaccessible.');
-        }
-        //TODO save
-        this.walletFilePath = filePath ? filePath : this.walletFilePath;
+        this.label = source.label;
+        this.dateCreated = source.dateCreated || new Date();
     }
 
 }

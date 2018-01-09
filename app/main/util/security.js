@@ -1,5 +1,6 @@
 const fs = require('fs');
 const crypto = require('crypto');
+const Key = require('../models/key.js');
 
 module.exports = class Security {
 
@@ -17,14 +18,14 @@ module.exports = class Security {
             buf = Buffer.from(plainText, 'utf8');
         } else if (typeof plainText === 'object') {
             buf = Buffer.from(JSON.stringify(plainText), 'utf8');
-        }else {
+        } else {
             throw Error('The "plainText" argument must be a string of Buffer.');
         }
         if (salt) {
             if (Buffer.isBuffer(salt)) {
                 buf = Buffer.concat([buf, salt]);
             } else if (typeof salt === 'string') {
-                buf = Buffer.concat([buf,  Buffer.from(salt, 'utf8')]);
+                buf = Buffer.concat([buf, Buffer.from(salt, 'utf8')]);
             } else {
                 throw Error('The "salt" argument must be a string of Buffer if provided.');
             }
@@ -44,15 +45,13 @@ module.exports = class Security {
         if (!password) {
             throw new Error('The "password" argument is required.');
         }
+        let key = (password instanceof Key ? password : new Key(password));
         let version = Buffer.from([0x00, 0x01]); //version of the encrypted data, for future backwards-compatibilty
-        let salt = crypto.randomBytes(64); //generate random salt
-        let iv = crypto.randomBytes(12); //random IV
         let plainText = new Buffer(JSON.stringify(data), 'utf8');
-        let key = crypto.pbkdf2Sync(password, salt, 2145, 32, 'sha512'); //derive key
-        let cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+        let cipher = crypto.createCipheriv('aes-256-gcm', key.value, key.iv);
         let encrypted = Buffer.concat([cipher.update(plainText), cipher.final()]);
         let tag = cipher.getAuthTag();
-        return Buffer.concat([version, salt, iv, tag, encrypted]).toString('base64');
+        return Buffer.concat([version, key.salt, key.iv, tag, encrypted]).toString('base64');
     }
 
     /**
